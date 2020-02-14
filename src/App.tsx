@@ -5,7 +5,7 @@ import './App.css';
 import Home from './pages/Home'
 
 import { Router, Link } from "@reach/router";
-import {  } from 'antd';
+import { Card } from 'antd';
 
 const App = () => {
   return (
