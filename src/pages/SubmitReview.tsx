@@ -129,7 +129,18 @@ const DynamicRule = () => {
   );
 };
 
-const YearInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
+
+interface YearValue {
+  gradLevel?: 'undergraduate' | 'graduate';
+  year?: '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th+';
+}
+
+interface YearInputProps {
+  value?: YearValue;
+  onChange?: (value: YearValue) => void;
+}
+
+const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
   const [gradLevel, setGradLevel] = useState();
   const [year, setYear] = useState();
 
@@ -172,62 +183,6 @@ const YearInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
     </span>
   )
 }
-
-
-interface PriceValue {
-  number?: number;
-  currency?: 'rmb' | 'dollar';
-}
-
-interface PriceInputProps {
-  value?: PriceValue;
-  onChange?: (value: PriceValue) => void;
-}
-
-const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
-  const [number, setNumber] = useState(0);
-  const [currency, setCurrency] = useState('rmb');
-
-  const triggerChange = changedValue => {
-    if (onChange) {
-      onChange({ number, currency, ...value, ...changedValue });
-    }
-  };
-
-  const onNumberChange = e => {
-    const newNumber = parseInt(e.target.value || 0, 10);
-    if (Number.isNaN(number)) {
-      return;
-    }
-    if (!('number' in value)) {
-      setNumber(newNumber);
-    }
-    triggerChange({ number: newNumber });
-  };
-
-  const onCurrencyChange = newCurrency => {
-    if (!('currency' in value)) {
-      setCurrency(newCurrency);
-    }
-    triggerChange({ currency: newCurrency });
-  };
-
-  return (
-    <span>
-      <Input
-        type="text"
-        value={value.number || number}
-        onChange={onNumberChange}
-        style={{ width: 100, marginRight: 8 }}
-      />
-      <Select value={value.currency || currency} style={{ width: 80 }} onChange={onCurrencyChange}>
-        <Option value="rmb">RMB</Option>
-        <Option value="dollar">Dollar</Option>
-      </Select>
-    </span>
-  );
-};
-
 
 const SubmitReview = (props: RouteComponentProps) => {
   return (
