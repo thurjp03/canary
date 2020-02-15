@@ -1,5 +1,7 @@
-.company-card .ant-card-body {
+.company-card {
   display: flex;
+  color: #333;
+  /* padding: 10px; */
 }
 
 /* .company-card__company-details {
@@ -33,9 +35,9 @@
 
 .company-card__content {
   flex: 1;
-  border-left: 1px solid #e8e8e8;
+  /* border-left: 1px solid #e8e8e8; */
   margin-left: 20px;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .company-card__company-stats {
@@ -45,11 +47,10 @@
 .company-card__company-stat td:first-child {
   text-align: right;
   padding-right: 10px;
-  color: #6e6e6e;
+  color: #7a7a7a;
   font-size: 0.9em;
 }
 
 .company-card__company-stat .ant-rate {
-  font-size: 27px;
-  line-height: 25px;
+  color: #FFBD00;
 }

@@ -1,3 +1,15 @@
 .App {
   padding: 20px;
 }
+
+.ant-card {
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 0 0 20px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.note {
+  font-size: 12px;
+  color: rgba(0,0,0,0.45);
+}
