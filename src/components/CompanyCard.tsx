@@ -1,7 +1,10 @@
 import React from 'react';
 import './CompanyCard.css';
 
-import { Card, Rate } from 'antd';
+import { Card, Rate, Statistic } from 'antd';
+import { Link } from "@reach/router";
+
+import Review from './ReviewCard';
 
 const CompanyMeta = ({  }: {  }) => (
   <div className="company-meta">
@@ -24,41 +27,50 @@ const CompanyCard = ({ name, description, image }: { name: string, description: 
             <div className="company-card__description ant-card-meta-description">{description}</div>
           </div>
         </div>
-        <table className="company-card__company-stats">
-          <tbody>
-            <tr className="company-card__company-stat">
-              <td>Overall rating</td>
-              <td><Rate style={{
-                fontSize: '27px',
-                lineHeight: '25px'
-              }} character="●" value={3.5} disabled allowHalf /></td>
-            </tr>
-            <tr className="company-card__company-stat">
-              <td>Culture</td>
-              <td><Rate style={{
-                fontSize: '27px',
-                lineHeight: '25px'
-              }} character="●" value={1.5} disabled allowHalf /></td>
-            </tr>
-            <tr className="company-card__company-stat">
-              <td>Work difficulty</td>
-              <td><Rate style={{
-                fontSize: '27px',
-                lineHeight: '25px'
-              }} character="●" value={4} disabled allowHalf /></td>
-            </tr>
-            <tr className="company-card__company-stat">
-              <td>Average pay</td>
-              <td>$20/hr, $6000 sum</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="company-card__company-stats">
+          <table>
+            <tbody>
+              {/* <tr className="company-card__company-stat">
+                <td>Overall rating</td>
+                <td><Rate style={{
+                  fontSize: '27px',
+                  lineHeight: '25px'
+                }} character="●" value={3.5} disabled allowHalf /></td>
+              </tr> */}
+              <tr className="company-card__company-stat">
+                <td valign="bottom" style={{ paddingBottom: '8px' }}>Overall rating</td>
+                <td><span style={{ fontWeight: 700, fontSize: '30px' }}>4.32</span></td>
+              </tr>
+              <tr className="company-card__company-stat">
+                <td>Culture</td>
+                <td><Rate style={{
+                  fontSize: '27px',
+                  lineHeight: '25px'
+                }} character="●" value={1.5} disabled allowHalf /></td>
+              </tr>
+              <tr className="company-card__company-stat">
+                <td>Work difficulty</td>
+                <td><Rate style={{
+                  fontSize: '27px',
+                  lineHeight: '25px'
+                }} character="●" value={4} disabled allowHalf /></td>
+              </tr>
+              <tr className="company-card__company-stat">
+                <td>Average pay</td>
+                <td>$20/hr, $6000 sum</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="company-card__more">
+          <Link to="/" >More company details...</Link>
+        </div>
       </div>
       <div className="company-card__content">
         <div className="note">Most relevant review</div>
+        <Review/>
       </div>
     </div>
-    
   </Card>
 );
 

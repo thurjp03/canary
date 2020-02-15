@@ -41,14 +41,32 @@
 }
 
 .company-card__company-stats {
-  margin: 10px 10px 0 auto;
+  margin: 10px 10px 0 0;
+}
+
+.company-card__company-stats > * {
+  margin-left: auto;
+}
+
+.company-card__more {
+  text-align: right;
+  margin-top: 3px;
+  
+}
+
+/* .company-card__more a {
+  color: #FFBD00;
+} */
+
+.company-card__company-stats .ant-statistic-content {
+  font-weight: 700;
 }
 
 .company-card__company-stat td:first-child {
-  text-align: right;
   padding-right: 10px;
   color: #7a7a7a;
   font-size: 0.9em;
+  text-align: right;
 }
 
 .company-card__company-stat .ant-rate {
