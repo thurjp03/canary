@@ -24,6 +24,13 @@ const collegeSuggestions = [
   "Georgia State University",
 ].map((option, i) => ({ value: option }))
 
+const companySuggestions = [
+  "Amazon",
+  "General Motors",
+  "UPS",
+  "NCR",
+].map((option, i) => ({ value: option }))
+
 const majors = [
   "Computer Science",
   "Computational Media",
@@ -54,18 +61,73 @@ const DynamicRule = () => {
     <Form form={form} layout="vertical" name="dynamic_rule">
       <Steps direction="vertical">
         <Steps.Step status="process" title="About you" description={<AboutYou/>} />
-        <Steps.Step status="wait" title="Your internship" />
+        <Steps.Step status="wait" title="Internship details" description={<InternshipDetails />} />
+        <Steps.Step status="wait" title="Internship experience" description={<InternshipExperience />} />
         <Steps.Step status="wait" title="Submit" description={<Submit onSubmit={onSubmit}/>} />
       </Steps>
     </Form>
   );
 };
 
+const InternshipDetails = () => (
+  <div className="internship-details">
+    <Form.Item
+      name="internship-type"
+      label="Internship or Co-op"
+      rules={[
+        {
+          required: true,
+          message: 'Please select internship type',
+        }
+      ]}>
+      <Radio.Group defaultValue="internship" value="internship">
+        <Radio.Button value="internship">Internship</Radio.Button>
+        <Radio.Button value="co-op">Co-op</Radio.Button>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="company-name"
+      label="Company name"
+      rules={[
+        {
+          required: true,
+          message: 'Please input the company name',
+        }
+      ]}>
+      <AutoComplete
+        options={companySuggestions}
+        placeholder="Please input the company name"
+        style={{ maxWidth: '250px' }}
+        filterOption={(inputValue, option) =>
+          option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
+        }
+      />
+    </Form.Item>
+    <Form.Item
+      name="name"
+      label="Position title"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your position title',
+        },
+      ]}>
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your position title" />
+    </Form.Item>
+  </div>
+)
+
+const InternshipExperience = () => (
+  <div className="internship-experience">
+    
+  </div>
+)
+
+
 const AboutYou = () => (
   <div className="about-you">
     <Form.Item
       name="name"
-      wrapperCol={{ span: 14 }}
       label="Full name (will not be public)"
       // rules={[
       //   {
@@ -74,12 +136,11 @@ const AboutYou = () => (
       //   },
       // ]}
     >
-      <Input placeholder="Please input your full name" />
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your full name" />
     </Form.Item>
     <Form.Item
       name="school"
       label="School"
-      wrapperCol={{ span: 18 }}
       rules={[
         {
           required: true,
@@ -89,6 +150,7 @@ const AboutYou = () => (
       <AutoComplete
         options={collegeSuggestions}
         placeholder="Please input your school"
+        style={{ maxWidth: '320px' }}
         filterOption={(inputValue, option) =>
           option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
         }
@@ -96,7 +158,6 @@ const AboutYou = () => (
     </Form.Item>
     <Form.Item
       name="email"
-      wrapperCol={{ span: 14 }}
       label="School email (will not be public)"
       rules={[
         {
@@ -106,11 +167,11 @@ const AboutYou = () => (
         },
       ]}
     >
-      <Input placeholder="Please input your school email" />
+      <div className="label-description">Your email is only used to verify your student status</div>
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your school email" />
     </Form.Item>
     <Form.Item
       name="majors"
-      wrapperCol={{ span: 18 }}
       label={
         <span>
           Major(s)&nbsp;
@@ -126,7 +187,10 @@ const AboutYou = () => (
         },
       ]}
     >
-      <Select mode="tags" placeholder="Please input your major(s)" style={{ width: '100%' }} tokenSeparators={[',']}>
+      <Select
+        mode="tags"
+        placeholder="Please input your major(s)"
+        style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
         {majors}
       </Select>
     </Form.Item>
@@ -138,8 +202,30 @@ const AboutYou = () => (
   </div>
 )
 
+const verticalStyle = {
+  display: 'block',
+  height: '30px',
+  lineHeight: '30px',
+}
+
 const Submit = ({ onSubmit }) => (
   <div className="submit">
+    <Form.Item
+      name="platform-use"
+      label="How likely would you be to use a platform that lets you read detailed student reviews of internship/co-op experiences?">
+      <Radio.Group>
+        <Radio style={verticalStyle} value="4">Definitely</Radio>
+        <Radio style={verticalStyle} value="3">Very likely</Radio>
+        <Radio style={verticalStyle} value="2">Probably</Radio>
+        <Radio style={verticalStyle} value="1">Not likely</Radio>
+        <Radio style={verticalStyle} value="0">Not at all</Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="feedback"
+      label="Any thoughts or feedback about Canary? What would you like from this type of platform?">
+      <Input.TextArea rows={3}></Input.TextArea>
+    </Form.Item>
     <Form.Item>
       <Button type="primary" onClick={onSubmit}>
         Submit

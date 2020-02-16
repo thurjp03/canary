@@ -17,3 +17,9 @@
 .centered {
   margin: 0 auto;
 }
+
+@media (max-width: 575px) {
+  .App {
+    padding: 10px;
+  }
+}

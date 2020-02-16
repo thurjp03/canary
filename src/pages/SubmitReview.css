@@ -20,3 +20,31 @@
   flex: 1;
   text-align: center;
 }
+
+.ant-form-item-label > label {
+  max-height: none;
+}
+
+.ant-steps-item-description {
+  padding-left: 5px;
+}
+
+.label-description {
+  font-size: 0.8em;
+  color: #3337;
+  padding-left: 12px;
+  position: relative;
+  top: -10px;
+}
+
+@media (max-width: 475px) {
+  .ant-steps-item-tail {
+    display: none !important;
+  }
+  .ant-steps-item-description {
+    padding-top: 10px;
+  }
+  .ant-steps-vertical .ant-steps-item-content {
+    overflow: visible;
+  }
+}
