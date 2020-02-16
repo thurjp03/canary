@@ -5,7 +5,11 @@
 .year-select {
   display: grid;
   gap: 3px;
-  max-width: 300px;
+  max-width: 380px;
+}
+
+.year-select .ant-radio-button-wrapper {
+  padding: 0;
 }
 
 .year-select .ant-radio-group {

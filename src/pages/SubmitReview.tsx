@@ -2,8 +2,9 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import './SubmitReview.css';
 
 import { RouteComponentProps } from "@reach/router"
-import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip } from 'antd/es';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps } from 'antd/es';
+import { QuestionCircleOutlined, UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '@ant-design/icons';
+import { Collapse } from 'antd';
 // import { InputChangeEvent } from 'antd/es/input';
 
 const { Option } = Select;
@@ -20,8 +21,8 @@ const { Option } = Select;
 const collegeSuggestions = [
   "Georgia Institute of Technology",
   "Carnegie Mellon",
-  "Georgia State school",
-]
+  "Georgia State University",
+].map((option, i) => ({ value: option }))
 
 const majors = [
   "Computer Science",
@@ -51,83 +52,101 @@ const DynamicRule = () => {
 
   return (
     <Form form={form} layout="vertical" name="dynamic_rule">
-      <Form.Item
-        name="name"
-        label="Full name (will not be public)"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your full name',
-          },
-        ]}
-      >
-        <Input placeholder="Please input your full name" />
-      </Form.Item>
-      <Form.Item
-        name="school"
-        label="School"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your school',
-          }
-        ]}>
-        <AutoComplete
-          dataSource={collegeSuggestions}
-          placeholder="Please input your school"
-          filterOption={(inputValue, option) =>
-            option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
-          }
-        />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        label="School email (will not be public)"
-        rules={[
-          {
-            required: true,
-            type: 'email',
-            message: 'Please input a valid school email',
-          },
-        ]}
-      >
-        <Input placeholder="Please input your school email" />
-      </Form.Item>
-      <Form.Item
-        name="majors"
-        label={
-          <span>
-            Major(s)&nbsp;
-            <Tooltip title="Test">
-              <QuestionCircleOutlined />
-            </Tooltip>
-          </span>
-        }
-        rules={[
-          {
-            required: true,
-            message: 'Please input your major(s)',
-          },
-        ]}
-      >
-        <Select mode="tags" placeholder="Please input your major(s)" style={{ width: '100%' }} tokenSeparators={[',']}>
-          {majors}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name="year"
-        label="Year"
-      >
-        <YearInput/>
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" onClick={onSubmit}>
-          Submit
-        </Button>
-      </Form.Item>
+      <Steps direction="vertical">
+        <Steps.Step status="process" title="About you" description={<AboutYou/>} />
+        <Steps.Step status="wait" title="Your internship" />
+        <Steps.Step status="wait" title="Submit" description={<Submit onSubmit={onSubmit}/>} />
+      </Steps>
     </Form>
   );
 };
+
+const AboutYou = () => (
+  <div className="about-you">
+    <Form.Item
+      name="name"
+      wrapperCol={{ span: 14 }}
+      label="Full name (will not be public)"
+      // rules={[
+      //   {
+      //     required: true,
+      //     message: 'Please input your full name',
+      //   },
+      // ]}
+    >
+      <Input placeholder="Please input your full name" />
+    </Form.Item>
+    <Form.Item
+      name="school"
+      label="School"
+      wrapperCol={{ span: 18 }}
+      rules={[
+        {
+          required: true,
+          message: 'Please input your school',
+        }
+      ]}>
+      <AutoComplete
+        options={collegeSuggestions}
+        placeholder="Please input your school"
+        filterOption={(inputValue, option) =>
+          option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
+        }
+      />
+    </Form.Item>
+    <Form.Item
+      name="email"
+      wrapperCol={{ span: 14 }}
+      label="School email (will not be public)"
+      rules={[
+        {
+          required: true,
+          type: 'email',
+          message: 'Please input a valid school email',
+        },
+      ]}
+    >
+      <Input placeholder="Please input your school email" />
+    </Form.Item>
+    <Form.Item
+      name="majors"
+      wrapperCol={{ span: 18 }}
+      label={
+        <span>
+          Major(s)&nbsp;
+                <Tooltip title="Test">
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      }
+      rules={[
+        {
+          required: true,
+          message: 'Please input your major(s)',
+        },
+      ]}
+    >
+      <Select mode="tags" placeholder="Please input your major(s)" style={{ width: '100%' }} tokenSeparators={[',']}>
+        {majors}
+      </Select>
+    </Form.Item>
+    <Form.Item
+      name="year"
+      label="Year">
+      <YearInput />
+    </Form.Item>
+  </div>
+)
+
+const Submit = ({ onSubmit }) => (
+  <div className="submit">
+    <Form.Item>
+      <Button type="primary" onClick={onSubmit}>
+        Submit
+      </Button>
+    </Form.Item>
+  </div>
+)
 
 
 interface YearValue {
@@ -186,8 +205,8 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
 
 const SubmitReview = (props: RouteComponentProps) => {
   return (
-    <div className="SubmitReview">
-      <DynamicRule/>
+    <div className="SubmitReview centered">
+      <DynamicRule />
     </div>
   );
 }
