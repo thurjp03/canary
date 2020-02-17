@@ -50,12 +50,12 @@ const DynamicRule = () => {
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
       if (errorInfo.values.remember_personal) {
-        setCookie('name', errorInfo.values.name || '', { path: '/' });
-        setCookie('school', errorInfo.values.school || '', { path: '/' });
-        setCookie('email', errorInfo.values.email || '', { path: '/' });
-        setCookie('majors', errorInfo.values.majors || [], { path: '/' });
-        setCookie('year', errorInfo.values.year || {}, { path: '/' });
-        setCookie('remember_personal', errorInfo.values.remember_personal, { path: '/' });
+        setCookie('name', errorInfo.values.name || '');
+        setCookie('school', errorInfo.values.school || '');
+        setCookie('email', errorInfo.values.email || '');
+        setCookie('majors', errorInfo.values.majors || []);
+        setCookie('year', errorInfo.values.year || {});
+        setCookie('remember_personal', errorInfo.values.remember_personal);
       } else {
         removeCookie('name')
         removeCookie('school')
@@ -124,7 +124,7 @@ const AboutYou = () => (
     <Form.Item
       name="email"
       label="School email (will not be public)"
-      extra="Your email is only used to verify your student status"
+      extra="Your email is only used to verify that you are a student"
       rules={[
         {
           required: true,
@@ -137,14 +137,7 @@ const AboutYou = () => (
     </Form.Item>
     <Form.Item
       name="majors"
-      label={
-        <span>
-          Major(s)&nbsp;
-                <Tooltip title="Test">
-            <QuestionCircleOutlined />
-          </Tooltip>
-        </span>
-      }
+      label="Major(s)"
       rules={[
         {
           required: true,
@@ -166,10 +159,10 @@ const AboutYou = () => (
     </Form.Item>
     <Form.Item
       name="remember_personal"
-      valuePropName="checked" noStyle>
+      valuePropName="checked"
+      extra="If this is checked, once you submit, we'll store these details locally in your cookies, so you don't have to re-enter them if you write another review.">
       <Checkbox>Remember personal details for later?</Checkbox>
     </Form.Item>
-    <p className="disclaimier">If this is checked, once you submit, we'll store these details locally in your cookies, so you don't have to re-enter them if you write another review.</p>
   </div>
 )
 
@@ -214,6 +207,38 @@ const InternshipDetails = () => (
         },
       ]}>
       <Input style={{ maxWidth: '250px' }} placeholder="Please input your position title" />
+    </Form.Item>
+    <Form.Item
+      name="department"
+      label="Department/Team"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your department/team',
+        },
+      ]}>
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your department/team" />
+    </Form.Item>
+    <Form.Item
+      name="structured_program"
+      label={
+        <span>
+          Is there a structured internship/co-op program?&nbsp;
+          <Tooltip title="Employers usually make it clear on their hiring websites that the program you enrolled in was a structured program">
+          <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      }
+      rules={[
+        {
+          required: true,
+          message: 'Please specify if there is a structured internship/co-op program',
+        }
+      ]}>
+      <Radio.Group>
+        <Radio.Button value="yes">Yes</Radio.Button>
+        <Radio.Button value="no">No</Radio.Button>
+      </Radio.Group>
     </Form.Item>
   </div>
 )

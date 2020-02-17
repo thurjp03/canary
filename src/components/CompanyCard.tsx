@@ -1,16 +1,32 @@
 import React from 'react';
 import './CompanyCard.css';
 
-import { Card, Rate, Statistic } from 'antd';
+import { Card, Rate, Tooltip } from 'antd';
 import { Link } from "@reach/router";
 
-import Review from './ReviewCard';
+import ReviewCard from './ReviewCard';
 
 const CompanyMeta = ({  }: {  }) => (
   <div className="company-meta">
     test
   </div>
 )
+
+const review = {
+  position_title: "Product Designer",
+  pay: {
+    type: 'hourly',
+    amount: 20,
+    currency: 'USD'
+  },
+  overall_rating: 3.5,
+  year: {
+    grad_level: 'undergraduate',
+    year: '3rd'
+  },
+  school: 'Georgia Institute of Technology',
+  major: 'Computational Media'
+}
 
 const CompanyCard = ({ name, description, image }: { name: string, description: string, image: string }) =>  (
   <Card>
@@ -43,17 +59,27 @@ const CompanyCard = ({ name, description, image }: { name: string, description: 
               </tr>
               <tr className="company-card__company-stat">
                 <td>Culture</td>
-                <td><Rate style={{
-                  fontSize: '27px',
-                  lineHeight: '25px'
-                }} character="●" value={1.5} disabled allowHalf /></td>
+                <td>
+                  <Tooltip placement="right" title="Toxic to Ideal">
+                    <Rate style={{
+                      fontSize: '27px',
+                      lineHeight: '25px'
+                    }} character="●" value={2.5} disabled allowHalf />
+                    &nbsp;
+                  </Tooltip>
+                </td>
               </tr>
               <tr className="company-card__company-stat">
                 <td>Work difficulty</td>
-                <td><Rate style={{
-                  fontSize: '27px',
-                  lineHeight: '25px'
-                }} character="●" value={4} disabled allowHalf /></td>
+                <td>
+                  <Tooltip placement="right" title="Easy to Hard">
+                    <Rate style={{
+                      fontSize: '27px',
+                      lineHeight: '25px'
+                    }} character="●" value={4} disabled allowHalf />
+                    &nbsp;
+                  </Tooltip>
+                </td>
               </tr>
               <tr className="company-card__company-stat">
                 <td>Average pay</td>
@@ -67,8 +93,13 @@ const CompanyCard = ({ name, description, image }: { name: string, description: 
         </div>
       </div>
       <div className="company-card__content">
-        <div className="note">Most relevant review</div>
-        <Review/>
+        <Card>
+          <div className="note">Most relevant review</div>
+          <ReviewCard {...review} />
+        </Card>
+        <div className="company-card__more-reviews">
+          <Link to="/">Read {5} more relevant reviews...</Link>
+        </div>
       </div>
     </div>
   </Card>
