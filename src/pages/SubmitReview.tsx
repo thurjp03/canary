@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import './SubmitReview.css';
 
+import { useCookies } from 'react-cookie';
 import { RouteComponentProps } from "@reach/router"
-import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps } from 'antd/es';
+import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps, Checkbox } from 'antd/es';
 import { QuestionCircleOutlined, UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 // import { InputChangeEvent } from 'antd/es/input';
@@ -39,14 +40,8 @@ const majors = [
 
 const DynamicRule = () => {
   const [form] = Form.useForm();
-
-  // useEffect(() => {
-  //   form.validateFields(['nickname']);
-  // }, [checkNick]);
-
-  // const onCheckboxChange = (e: CheckboxChangeEvent) => {
-  //   if (e.target) setCheckNick((e.target as HTMLInputElement).checked);
-  // };
+  const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'school', 'majors', 'year']);
+  console.log(cookies);
 
   const onSubmit = async () => {
     try {
@@ -54,11 +49,38 @@ const DynamicRule = () => {
       console.log('Success:', values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
+      if (errorInfo.values.remember_personal) {
+        setCookie('name', errorInfo.values.name || '', { path: '/' });
+        setCookie('school', errorInfo.values.school || '', { path: '/' });
+        setCookie('email', errorInfo.values.email || '', { path: '/' });
+        setCookie('majors', errorInfo.values.majors || [], { path: '/' });
+        setCookie('year', errorInfo.values.year || {}, { path: '/' });
+        setCookie('remember_personal', errorInfo.values.remember_personal, { path: '/' });
+      } else {
+        removeCookie('name')
+        removeCookie('school')
+        removeCookie('email')
+        removeCookie('majors')
+        removeCookie('year')
+        removeCookie('remember_personal');
+      }
     }
   };
 
   return (
-    <Form form={form} layout="vertical" name="dynamic_rule">
+    <Form
+      initialValues={{
+        name: cookies.name,
+        school: cookies.school,
+        email: cookies.email,
+        majors: cookies.majors,
+        year: cookies.year,
+        remember_personal: cookies.remember_personal === 'true',
+        internship_type: 'internship'
+      }}
+      form={form}
+      layout="vertical"
+      name="dynamic_rule">
       <Steps direction="vertical">
         <Steps.Step status="process" title="About you" description={<AboutYou/>} />
         <Steps.Step status="wait" title="Internship details" description={<InternshipDetails />} />
@@ -69,74 +91,20 @@ const DynamicRule = () => {
   );
 };
 
-const InternshipDetails = () => (
-  <div className="internship-details">
-    <Form.Item
-      name="internship-type"
-      label="Internship or Co-op"
-      rules={[
-        {
-          required: true,
-          message: 'Please select internship type',
-        }
-      ]}>
-      <Radio.Group defaultValue="internship" value="internship">
-        <Radio.Button value="internship">Internship</Radio.Button>
-        <Radio.Button value="co-op">Co-op</Radio.Button>
-      </Radio.Group>
-    </Form.Item>
-    <Form.Item
-      name="company-name"
-      label="Company name"
-      rules={[
-        {
-          required: true,
-          message: 'Please input the company name',
-        }
-      ]}>
-      <AutoComplete
-        options={companySuggestions}
-        placeholder="Please input the company name"
-        style={{ maxWidth: '250px' }}
-        filterOption={(inputValue, option) =>
-          option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
-        }
-      />
-    </Form.Item>
-    <Form.Item
-      name="name"
-      label="Position title"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your position title',
-        },
-      ]}>
-      <Input style={{ maxWidth: '250px' }} placeholder="Please input your position title" />
-    </Form.Item>
-  </div>
-)
-
-const InternshipExperience = () => (
-  <div className="internship-experience">
-    
-  </div>
-)
-
 
 const AboutYou = () => (
   <div className="about-you">
     <Form.Item
       name="name"
       label="Full name (will not be public)"
-      // rules={[
-      //   {
-      //     required: true,
-      //     message: 'Please input your full name',
-      //   },
-      // ]}
+    // rules={[
+    //   {
+    //     required: true,
+    //     message: 'Please input your full name',
+    //   },
+    // ]}
     >
-      <Input style={{ maxWidth: '250px' }} placeholder="Please input your full name" />
+      <Input style={{ maxWidth: '250px' }} value={'foo'} placeholder="Please input your full name" />
     </Form.Item>
     <Form.Item
       name="school"
@@ -151,14 +119,12 @@ const AboutYou = () => (
         options={collegeSuggestions}
         placeholder="Please input your school"
         style={{ maxWidth: '320px' }}
-        filterOption={(inputValue, option) =>
-          option ? option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false
-        }
-      />
+        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/>
     </Form.Item>
     <Form.Item
       name="email"
       label="School email (will not be public)"
+      extra="Your email is only used to verify your student status"
       rules={[
         {
           required: true,
@@ -167,7 +133,6 @@ const AboutYou = () => (
         },
       ]}
     >
-      <div className="label-description">Your email is only used to verify your student status</div>
       <Input style={{ maxWidth: '250px' }} placeholder="Please input your school email" />
     </Form.Item>
     <Form.Item
@@ -197,8 +162,65 @@ const AboutYou = () => (
     <Form.Item
       name="year"
       label="Year">
-      <YearInput />
+      <YearInput/>
     </Form.Item>
+    <Form.Item
+      name="remember_personal"
+      valuePropName="checked" noStyle>
+      <Checkbox>Remember personal details for later?</Checkbox>
+    </Form.Item>
+    <p className="disclaimier">If this is checked, once you submit, we'll store these details locally in your cookies, so you don't have to re-enter them if you write another review.</p>
+  </div>
+)
+
+const InternshipDetails = () => (
+  <div className="internship-details">
+    <Form.Item
+      name="internship_type"
+      label="Internship or Co-op"
+      rules={[
+        {
+          required: true,
+          message: 'Please select internship type',
+        }
+      ]}>
+      <Radio.Group defaultValue="internship" value="internship">
+        <Radio.Button value="internship">Internship</Radio.Button>
+        <Radio.Button value="co-op">Co-op</Radio.Button>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="company_name"
+      label="Company name"
+      rules={[
+        {
+          required: true,
+          message: 'Please input the company name',
+        }
+      ]}>
+      <AutoComplete
+        options={companySuggestions}
+        placeholder="Please input the company name"
+        style={{ maxWidth: '250px' }}
+        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/>
+    </Form.Item>
+    <Form.Item
+      name="position_title"
+      label="Position title"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your position title',
+        },
+      ]}>
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your position title" />
+    </Form.Item>
+  </div>
+)
+
+const InternshipExperience = () => (
+  <div className="internship-experience">
+    
   </div>
 )
 
@@ -211,7 +233,7 @@ const verticalStyle = {
 const Submit = ({ onSubmit }) => (
   <div className="submit">
     <Form.Item
-      name="platform-use"
+      name="platform_use"
       label="How likely would you be to use a platform that lets you read detailed student reviews of internship/co-op experiences?">
       <Radio.Group>
         <Radio style={verticalStyle} value="4">Definitely</Radio>
@@ -273,11 +295,11 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
 
   return (
     <span className="year-select">
-      <Radio.Group onChange={onGradLevelChange}>
+      <Radio.Group value={value.gradLevel} onChange={onGradLevelChange}>
         <Radio.Button value="undergraduate">Undergraduate</Radio.Button>
         <Radio.Button value="graduate">Graduate</Radio.Button>
       </Radio.Group>
-      <Radio.Group onChange={onCurrencyChange}>
+      <Radio.Group value={value.year} onChange={onCurrencyChange}>
         <Radio.Button value="1st">1st</Radio.Button>
         <Radio.Button value="2nd">2nd</Radio.Button>
         <Radio.Button value="3rd">3rd</Radio.Button>
