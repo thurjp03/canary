@@ -1,6 +1,7 @@
 .company-card {
   display: flex;
   color: #333;
+  flex-wrap: wrap;
   /* padding: 10px; */
 }
 
@@ -18,7 +19,7 @@
 }
 
 .company-card__main-image {
-  height: 70px;
+  width: 150px;
 }
 
 .company-card__detail {
@@ -36,18 +37,17 @@
 
 .company-card__content {
   flex: 1;
+  margin-left: 10px;
   /* border-left: 1px solid #e8e8e8; */
-  margin-left: 20px;
   /* padding: 20px; */
 }
 
 .company-card__company-stats {
-  margin: 10px 10px 0 0;
+  margin-top: 10px;
 }
-
-.company-card__company-stats > * {
+/* .company-card__company-stats > * {
   margin-left: auto;
-}
+} */
 
 .company-card__more {
   text-align: right;
@@ -63,12 +63,12 @@
   font-weight: 700;
 }
 
-.company-card__company-stat td:first-child {
+/* .company-card__company-stat td:first-child {
   padding-right: 10px;
   color: #7a7a7a;
   font-size: 0.9em;
   text-align: right;
-}
+} */
 
 .company-card__company-stat .ant-rate {
   color: #FFBD00;
@@ -77,14 +77,45 @@
 .company-card__content .ant-card {
   box-shadow: rgba(0, 0, 0, 0.04) 0 0 5px;
   position: relative;
+  cursor: pointer;
 }
 
-.company-card .note {
-  position: absolute;
-  top: 8px;
-  right: 14px;
+.company-card__content .ant-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.08) 0 0 20px;
+}
+
+.company-stats__stat {
+}
+
+.stat__label {
+  color: #3339;
+  justify-self: right;
+}
+
+.stat__value {
+  font-size: 32px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+  align-items: end;
+  column-gap: 8px;
+  grid-auto-flow: row;
+}
+
+.company-card__stats {
+  grid-template-columns: 1fr auto;
 }
 
 .company-card__more-reviews {
   text-align: right;
+}
+
+.company-card .note {
+  position: absolute;
+  top: 10px;
+  right: 14px;
 }

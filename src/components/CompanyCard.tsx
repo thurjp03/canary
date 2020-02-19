@@ -29,7 +29,7 @@ const review = {
 }
 
 const CompanyCard = ({ name, description, image }: { name: string, description: string, image: string }) =>  (
-  <Card>
+  <Card style={{display: 'block'}}>
     {/* <Card.Meta title={name} avatar={<img className="company-image" src={image}/>} description={<CompanyMeta/>}/>
     <div className="content">
       Content
@@ -43,62 +43,41 @@ const CompanyCard = ({ name, description, image }: { name: string, description: 
             <div className="company-card__description ant-card-meta-description">{description}</div>
           </div>
         </div>
-        <div className="company-card__company-stats">
-          <table>
-            <tbody>
-              {/* <tr className="company-card__company-stat">
-                <td>Overall rating</td>
-                <td><Rate style={{
-                  fontSize: '27px',
-                  lineHeight: '25px'
-                }} character="●" value={3.5} disabled allowHalf /></td>
-              </tr> */}
-              <tr className="company-card__company-stat">
-                <td valign="bottom" style={{ paddingBottom: '8px' }}>Overall rating</td>
-                <td><span style={{ fontWeight: 700, fontSize: '30px' }}>4.32</span></td>
-              </tr>
-              <tr className="company-card__company-stat">
-                <td>Culture</td>
-                <td>
-                  <Tooltip placement="right" title="Toxic to Ideal">
-                    <Rate style={{
-                      fontSize: '27px',
-                      lineHeight: '25px'
-                    }} character="●" value={2.5} disabled allowHalf />
-                    &nbsp;
-                  </Tooltip>
-                </td>
-              </tr>
-              <tr className="company-card__company-stat">
-                <td>Work difficulty</td>
-                <td>
-                  <Tooltip placement="right" title="Easy to Hard">
-                    <Rate style={{
-                      fontSize: '27px',
-                      lineHeight: '25px'
-                    }} character="●" value={4} disabled allowHalf />
-                    &nbsp;
-                  </Tooltip>
-                </td>
-              </tr>
-              <tr className="company-card__company-stat">
-                <td>Average pay</td>
-                <td>$20/hr, $6000 sum</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="company-card__stats stats">
+          {/* <div className="company-stats__stat"> */}
+            <div className="stat__label">Overall rating</div>
+            <div className="stat__value">4.32</div>
+          {/* </div> */}
+          {/* <div className="company-stats__stat"> */}
+            <div className="stat__label">Culture</div>
+            <div className="stat__value">
+              <Rate style={{
+                fontSize: '27px',
+                lineHeight: '25px'
+              }} character="●" value={2.5} disabled allowHalf />
+            </div>
+          {/* </div> */}
+          {/* <div className="company-stats__stat"> */}
+            <div className="stat__label">Work difficulty</div>
+            <div className="stat__value">
+              <Rate style={{
+                fontSize: '27px',
+                lineHeight: '25px'
+              }} character="●" value={4} disabled allowHalf />
+            </div>
+          {/* </div> */}
         </div>
         <div className="company-card__more">
           <Link to="/" >More company details...</Link>
         </div>
       </div>
       <div className="company-card__content">
-        <Card>
+        <Card style={{ display: 'block' }}>
           <div className="note">Most relevant review</div>
           <ReviewCard {...review} />
         </Card>
         <div className="company-card__more-reviews">
-          <Link to="/">Read {5} more relevant reviews...</Link>
+          <Link to="/">Read {5} more relevant reviews or all {63} {"Amazon"} reviews...</Link>
         </div>
       </div>
     </div>

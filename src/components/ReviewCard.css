@@ -8,10 +8,38 @@
 }
 
 .review-card__position {
-  padding-right: 30px;
+  /* padding-right: 30px; */
+  flex: 1;
 }
 
 .review-card__student {
   padding-top: 8px;
+  text-align: right;
   /* font-style: italic; */
+}
+
+.review-card__content {
+  display: flex;
+}
+
+.review-card__stats {
+  margin-bottom: auto;
+}
+
+.review-card__text {
+  flex: 1;
+}
+
+.review-card__text {
+  padding-left: 10px;
+}
+
+.text-item__label {
+  /* color: #3339; */
+  font-weight: 600;
+  margin: 0;
+}
+
+.review-card__stats {
+  text-align: right;
 }
