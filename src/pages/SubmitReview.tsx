@@ -281,9 +281,14 @@ const Submit = ({ onSubmit }) => (
   </div>
 )
 
+export interface PayValue {
+  type: 'hourly'|'lump'|'monthly'|'weekly',
+  amount: number,
+  currency: 'USD'|'EUR',
+}
 
-interface YearValue {
-  gradLevel?: 'undergraduate' | 'graduate';
+export interface YearValue {
+  grad_level?: 'undergraduate' | 'graduate';
   year?: '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th+';
 }
 
@@ -298,7 +303,7 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
 
   const triggerChange = changedValue => {
     if (onChange) {
-      onChange({ gradLevel, year, ...value, ...changedValue });
+      onChange({ grad_level: gradLevel, year, ...value, ...changedValue });
     }
   };
 
@@ -320,7 +325,7 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
 
   return (
     <span className="year-select">
-      <Radio.Group value={value.gradLevel} onChange={onGradLevelChange}>
+      <Radio.Group value={value.grad_level} onChange={onGradLevelChange}>
         <Radio.Button value="undergraduate">Undergraduate</Radio.Button>
         <Radio.Button value="graduate">Graduate</Radio.Button>
       </Radio.Group>

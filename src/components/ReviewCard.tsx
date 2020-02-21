@@ -1,7 +1,13 @@
 import React from 'react';
 import './ReviewCard.css';
 
-import { Rate } from 'antd';
+import { Stat } from './Stat'
+import { Rate, Button } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Link } from "@reach/router";
+import { YearValue, PayValue } from "../pages/SubmitReview";
+
+import moment from "moment";
 
 const currencyMap = {
   USD: '$'
@@ -20,46 +26,60 @@ const PayDisplay = ({ type, amount, currency }) => (
   </span>
 )
 
-const ReviewCard = ({ position_title, pay, school, major }) => {
+const rateColor = value => value > 3.5 ? '#30ADF2' : value > 1.5 ? '#F9E02B' : '#F23E30'; //2FF495
+
+interface ReviewCardProps {
+  overall_rating: number,
+  culture_rating: number,
+  work_rating: number,
+  position_title: string,
+  team: string,
+  tools: string[],
+  major: string,
+  year: YearValue,
+  timestamp: Date,
+  pay: PayValue,
+  note?: string
+}
+
+const ReviewCard = ({ overall_rating, culture_rating, work_rating, position_title, pay, tools, major, team, year, timestamp, note="" }: ReviewCardProps) => {
   return (
     <div className="review-card">
-      <div className="review-card__demographics">
-        <div className="review-card__position">
-          <div className="review-card__position-title">{position_title}</div>
-          <div className="review-card__pay">Paid <PayDisplay {...pay}/></div>
+      <div className="review-card__header">
+        <div className="review-card__overall-rating" style={{ background: rateColor(overall_rating) }}>{overall_rating}<span className="divisor">/5</span></div>
+        <div className="review-card__stats">
+          <Stat title="Culture">
+            <Rate character="●" style={{ color: rateColor(culture_rating) }} value={culture_rating} disabled allowHalf />
+          </Stat>
+          <Stat title="Work Satisfaction">
+            <Rate character="●" style={{ color: rateColor(work_rating)}} value={work_rating} disabled allowHalf />
+          </Stat>
         </div>
-        <div className="review-card__student">
-          <div className="review-card__major">{major} major</div>
-          <div className="review-card__school">{school}</div>
+        <div className="review-card__meta">
+          <div className="review-card__note">{note}</div>
+          <div className="review-card__date">{moment(timestamp).format("MM/DD/YY")}</div>
         </div>
       </div>
       <div className="review-card__content">
-        <div className="review-card__stats">
-          <div className="stat__label">Overall rating</div>
-          <div className="stat__value">4.32</div>
-          <div className="stat__label">Culture</div>
-          <div className="stat__value">
-            <Rate style={{
-              fontSize: '27px',
-              lineHeight: '25px',
-              position: 'relative',
-              bottom: '4px'
-            }} character="●" value={2.5} disabled allowHalf />
-          </div>
-          <div className="stat__label">Work difficulty</div>
-          <div className="stat__value">
-            <Rate style={{
-              fontSize: '27px',
-              lineHeight: '25px',
-              position: 'relative',
-              bottom: '4px'
-            }} character="●" value={4} disabled allowHalf />
-          </div>
+        <h2 className="review-card__position">{position_title} <span className="review-card__team">{team}</span></h2>
+        <div className="review-card__description">
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
         </div>
-        <div className="review-card__text">
-          <div className="review-card__text-item">
-            <h3 className="text-item__label">Impressions</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet, est sed vulputate fermentum, dolor odio ullamcorper libero, quis cursus diam metus sit amet nunc. Fusce volutpat rutrum libero.</p>
+        <div className="review-card__footer">
+          <Stat title="Pay">
+            <PayDisplay {...pay} />
+          </Stat>
+          <Stat title="Tools">
+            {tools.map((tool, i) => <span className="review-card__tool" key={i}>{tool}</span>)}
+          </Stat>
+          <Stat title="Major">
+            {major}
+          </Stat>
+          <Stat title="Year">
+            {year.grad_level ? year.grad_level.charAt(0).toUpperCase() + year.grad_level.substring(1) : ''}, {year.year} year
+          </Stat>
+          <div className="review-card__view">
+            <Link to="/">Read more <ArrowRightOutlined/></Link>
           </div>
         </div>
       </div>

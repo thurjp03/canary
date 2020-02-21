@@ -3,6 +3,9 @@ import './CompanyCard.css';
 
 import { Card, Rate, Tooltip } from 'antd';
 import { Link } from "@reach/router";
+import { Stat } from './Stat'
+
+import { YearValue, PayValue } from "../pages/SubmitReview";
 
 import ReviewCard from './ReviewCard';
 
@@ -14,74 +17,57 @@ const CompanyMeta = ({  }: {  }) => (
 
 const review = {
   position_title: "Product Designer",
-  pay: {
+  pay: ({
     type: 'hourly',
     amount: 20,
     currency: 'USD'
-  },
+  }) as PayValue,
   overall_rating: 3.5,
-  year: {
+  culture_rating: 2,
+  work_rating: 5,
+  year: ({
     grad_level: 'undergraduate',
     year: '3rd'
-  },
+  }) as YearValue,
   school: 'Georgia Institute of Technology',
-  major: 'Computational Media'
+  major: 'Computational Media',
+  tools: ['Illustrator', 'React'],
+  team: 'AWS',
+  company: 'Amazon',
+  timestamp: new Date()
 }
 
 const CompanyCard = ({ name, description, image }: { name: string, description: string, image: string }) =>  (
-  <Card style={{display: 'block'}}>
-    {/* <Card.Meta title={name} avatar={<img className="company-image" src={image}/>} description={<CompanyMeta/>}/>
-    <div className="content">
-      Content
-    </div> */}
-    <div className="company-card">
-      <div className="company-card__company-details">
-        <div className="company-card__meta">
-          <img className="company-card__main-image" src={image} />
-          <div className="company-card__detail ant-card-meta-detail">
-            <div className="company-card__title ant-card-meta-title">{name}</div>
-            <div className="company-card__description ant-card-meta-description">{description}</div>
-          </div>
-        </div>
-        <div className="company-card__stats stats">
-          {/* <div className="company-stats__stat"> */}
-            <div className="stat__label">Overall rating</div>
-            <div className="stat__value">4.32</div>
-          {/* </div> */}
-          {/* <div className="company-stats__stat"> */}
-            <div className="stat__label">Culture</div>
-            <div className="stat__value">
-              <Rate style={{
-                fontSize: '27px',
-                lineHeight: '25px'
-              }} character="●" value={2.5} disabled allowHalf />
-            </div>
-          {/* </div> */}
-          {/* <div className="company-stats__stat"> */}
-            <div className="stat__label">Work difficulty</div>
-            <div className="stat__value">
-              <Rate style={{
-                fontSize: '27px',
-                lineHeight: '25px'
-              }} character="●" value={4} disabled allowHalf />
-            </div>
-          {/* </div> */}
-        </div>
-        <div className="company-card__more">
-          <Link to="/" >More company details...</Link>
-        </div>
+  <div className="company-card">
+    <div className="company-card__header">
+      <div className="company-card__left">
+        <img src={image} alt={name} className="company-card__img" />
+        <span className="company-card__title">
+          <h2 className="company-card__name">{name}</h2>
+          <div className="company-card__description">{description}</div>
+        </span>
       </div>
-      <div className="company-card__content">
-        <Card style={{ display: 'block' }}>
-          <div className="note">Most relevant review</div>
-          <ReviewCard {...review} />
-        </Card>
-        <div className="company-card__more-reviews">
-          <Link to="/">Read {5} more relevant reviews or all {63} {"Amazon"} reviews...</Link>
-        </div>
+      <div className="company-card__right">
+        {/* <div className="company-card__stats"> */}
+          <Stat title="Overall">
+            4.32
+          </Stat>
+          <Stat title="Culture">
+            4.32
+          </Stat>
+          <Stat title="Work">
+            4.32
+          </Stat>
+        {/* </div> */}
       </div>
     </div>
-  </Card>
+    <div className="company-card__more">
+      <Link to="/">More details about this company...</Link>
+    </div>
+    <div className="company-card__reviews">
+      <ReviewCard {...review} />
+    </div>
+  </div>
 );
 
 export default CompanyCard;

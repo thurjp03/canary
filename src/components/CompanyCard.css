@@ -1,121 +1,68 @@
 .company-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px;
+  background: #fff;
+}
+
+.company-card__header {
   display: flex;
-  color: #333;
-  flex-wrap: wrap;
-  /* padding: 10px; */
+  /* flex-wrap: wrap; */
 }
 
-/* .company-card__company-details {
-  display: grid;
-  grid-template-areas: 
-    "image title"
-    "image description"
-    "stats stats";
-  grid-template-rows: 70px auto;
-} */
-
-.company-card__meta {
-  display: flex;
+.company-card__img {
+  width: 200px;
 }
 
-.company-card__main-image {
-  width: 150px;
+.company-card__reviews {
+  padding: 10px;
 }
 
-.company-card__detail {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+.company-card__reviews .review-card {
+  box-shadow: rgba(0, 0, 0, 0.05) 0 0 8px;
 }
-
-.company-card__title {
-  font-size: 26px;
-  margin: 0 !important;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.company-card__content {
-  flex: 1;
-  margin-left: 10px;
-  /* border-left: 1px solid #e8e8e8; */
-  /* padding: 20px; */
-}
-
-.company-card__company-stats {
-  margin-top: 10px;
-}
-/* .company-card__company-stats > * {
-  margin-left: auto;
-} */
 
 .company-card__more {
   text-align: right;
-  margin-top: 3px;
-  
+  padding: 0 10px;
 }
-
-/* .company-card__more a {
-  color: #FFBD00;
-} */
-
-.company-card__company-stats .ant-statistic-content {
-  font-weight: 700;
-}
-
-/* .company-card__company-stat td:first-child {
-  padding-right: 10px;
-  color: #7a7a7a;
-  font-size: 0.9em;
-  text-align: right;
-} */
-
-.company-card__company-stat .ant-rate {
-  color: #FFBD00;
-}
-
-.company-card__content .ant-card {
-  box-shadow: rgba(0, 0, 0, 0.04) 0 0 5px;
-  position: relative;
-  cursor: pointer;
-}
-
-.company-card__content .ant-card:hover {
-  box-shadow: rgba(0, 0, 0, 0.08) 0 0 20px;
-}
-
-.company-stats__stat {
-}
-
-.stat__label {
-  color: #3339;
-  justify-self: right;
-}
-
-.stat__value {
-  font-size: 32px;
-  line-height: 30px;
-  font-weight: 700;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, auto));
-  align-items: end;
-  column-gap: 8px;
-  grid-auto-flow: row;
-}
-
+/* 
 .company-card__stats {
-  grid-template-columns: 1fr auto;
-}
-
-.company-card__more-reviews {
+  display: flex;
+  justify-content: flex-end;
   text-align: right;
+  padding: 10px 0 0 0;
+} */
+
+.company-card__title {
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.company-card .note {
-  position: absolute;
-  top: 10px;
-  right: 14px;
+.company-card__name {
+  font-weight: 600;
+  margin: 3px 0 0;
+}
+
+.company-card__right > .stat .stat__content {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.company-card__left {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.company-card__right {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px 10px 0 10px;
+  justify-content: flex-end;
+  align-content: center;
+  text-align: center;
 }

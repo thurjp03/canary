@@ -1,45 +1,88 @@
-.review-card__position-title {
-  font-size: 20px;
-  font-weight: 600;
+.review-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px;
+  background: #fff;
 }
 
-.review-card__demographics {
+.review-card__header {
+  display: flex;
+}
+
+.review-card__overall-rating {
+  width: 70px;
+  font-weight: 700;
+  font-size: 26px;
+  text-align: center;
+  margin-right: 10px;
+  padding-top: 4px;
+  color: #333;
+}
+
+.divisor {
+  font-size: 14px;
+}
+
+.review-card__stats {
   display: flex;
 }
 
 .review-card__position {
-  /* padding-right: 30px; */
-  flex: 1;
+  line-height: 18px;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.review-card__student {
-  padding-top: 8px;
-  text-align: right;
-  /* font-style: italic; */
+.review-card__team {
+  color: #3339;
+  font-size: 18px;
+  margin-left: 10px;
 }
 
 .review-card__content {
+  padding: 12px;
+}
+
+.review-card__footer {
   display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
-.review-card__stats {
-  margin-bottom: auto;
+.review-card__tool {
+  margin-right: 5px;
 }
 
-.review-card__text {
-  flex: 1;
-}
-
-.review-card__text {
-  padding-left: 10px;
-}
-
-.text-item__label {
-  /* color: #3339; */
-  font-weight: 600;
+.review-card .ant-rate-star {
   margin: 0;
 }
 
+.review-card .ant-rate {
+  position: relative;
+  font-size: 20px;
+  line-height: 12px;
+}
+
+.pay-display {
+  font-size: 16px;
+  line-height: 14px;
+}
+
 .review-card__stats {
+  padding: 10px 0 5px 0;
+}
+
+.review-card__view {
   text-align: right;
+  flex: 1;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.review-card__meta {
+  flex: 1;
+  text-align: right;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  padding-right: 10px;
 }
