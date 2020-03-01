@@ -1,16 +1,22 @@
-const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const { override, fixBabelImports, addLessLoader, disableEsLint } = require('customize-cra');
 
 module.exports = override(
-  fixBabelImports('import', {
-    libraryName: 'antd',
+  fixBabelImports('antd-mobile', {
     libraryDirectory: 'es',
-    style: true,
+    libraryName: 'antd-mobile',
+    style: true
   }),
+  fixBabelImports('antd', {
+    libraryDirectory: 'es',
+    libraryName: 'antd',
+    style: true
+  }),
+  // disableEsLint(),
   addLessLoader({
     javascriptEnabled: true,
-    modifyVars: {
-      'primary-color': '#25b864',
-      'link-color': '#f00',
-    },
+    // modifyVars: {
+    //   'primary-color': '#25b864',
+    //   'link-color': '#ff0',
+    // },
   }),
 );

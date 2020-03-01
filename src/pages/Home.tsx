@@ -3,7 +3,6 @@ import './Home.css';
 
 import CompanyCard from '../components/CompanyCard'
 import ReviewCard from '../components/ReviewCard'
-import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps, Checkbox } from 'antd/es';
 
 import { RouteComponentProps } from "@reach/router"
 import { reviews } from '../reviews'
@@ -19,10 +18,6 @@ const Home = (props: HomeProps) => {
       <div className="children">
         {props.children}
       </div>
-      <Radio.Group defaultValue="internship" value="internship">
-        <Radio.Button value="internship">Internship</Radio.Button>
-        <Radio.Button value="co-op">Co-op</Radio.Button>
-      </Radio.Group>
     </div>
   );
 }

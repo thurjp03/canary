@@ -1,4 +1,5 @@
 import React from 'react';
+import './test.less'
 import './App.css';
 
 import Home from './pages/Home'

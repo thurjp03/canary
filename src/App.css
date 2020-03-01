@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,700&display=swap');
-@import '~antd/dist/antd.css';
+/* @import '~antd/dist/antd.css'; */
 
 .App {
   padding: 20px;
@@ -42,5 +42,6 @@
     padding: 5px;
   }
 }
+
 
 /* ffb300 */
