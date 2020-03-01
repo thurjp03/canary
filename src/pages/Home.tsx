@@ -3,47 +3,26 @@ import './Home.css';
 
 import CompanyCard from '../components/CompanyCard'
 import ReviewCard from '../components/ReviewCard'
+import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps, Checkbox } from 'antd/es';
 
 import { RouteComponentProps } from "@reach/router"
-import { YearValue, PayValue } from "./SubmitReview";
+import { reviews } from '../reviews'
 
-
-const review = {
-  position_title: "Product Designer",
-  pay: ({
-    type: 'hourly',
-    amount: 20,
-    currency: 'USD'
-  }) as PayValue,
-  overall_rating: 3.5,
-  culture_rating: 2,
-  work_rating: 5,
-  year: ({
-    grad_level: 'undergraduate',
-    year: '3rd'
-  }) as YearValue,
-  school: 'Georgia Institute of Technology',
-  major: 'Computational Media',
-  tools: ['Illustrator', 'React'],
-  team: 'AWS',
-  company: 'Amazon',
-  timestamp: new Date()
-}
-
-const Home = (props: RouteComponentProps) => {
+interface HomeProps extends RouteComponentProps { children?: any }
+const Home = (props: HomeProps) => {
+  console.log(props)
   return (
     <div className="Home">
       <div className="reviews">
-        <CompanyCard
-          name="Amazon"
-          description="Small book seller"
-          image="https://s3.amazonaws.com/assets.knackhq.com/assets/5d1bb666c3eb0600104627ce/5e28933d75efad0019e346ab/original/amazonwebsite2000amazonlogo900.png"></CompanyCard>
-        <CompanyCard
-          name="Amazon"
-          description="Small book seller"
-          image="https://s3.amazonaws.com/assets.knackhq.com/assets/5d1bb666c3eb0600104627ce/5e28933d75efad0019e346ab/original/amazonwebsite2000amazonlogo900.png"></CompanyCard>
+        {reviews.slice(0, 10).map((review, i) => <CompanyCard key={i} name={review.company.name} image={review.company.image} description={review.company.description} reviews={[review]}/>)}
       </div>
-      {/* <ReviewCard {...review}></ReviewCard> */}
+      <div className="children">
+        {props.children}
+      </div>
+      <Radio.Group defaultValue="internship" value="internship">
+        <Radio.Button value="internship">Internship</Radio.Button>
+        <Radio.Button value="co-op">Co-op</Radio.Button>
+      </Radio.Group>
     </div>
   );
 }

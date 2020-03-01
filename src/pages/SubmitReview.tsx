@@ -6,6 +6,7 @@ import { RouteComponentProps } from "@reach/router"
 import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps, Checkbox } from 'antd/es';
 import { QuestionCircleOutlined, UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
+import { YearValue } from '../reviews';
 // import { InputChangeEvent } from 'antd/es/input';
 
 const { Option } = Select;
@@ -285,11 +286,6 @@ export interface PayValue {
   type: 'hourly'|'lump'|'monthly'|'weekly',
   amount: number,
   currency: 'USD'|'EUR',
-}
-
-export interface YearValue {
-  grad_level?: 'undergraduate' | 'graduate';
-  year?: '1st' | '2nd' | '3rd' | '4th' | '5th' | '6th+';
 }
 
 interface YearInputProps {

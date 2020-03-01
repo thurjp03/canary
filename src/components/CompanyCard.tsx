@@ -1,11 +1,10 @@
 import React from 'react';
 import './CompanyCard.css';
 
+import { Review } from '../reviews'
 import { Card, Rate, Tooltip } from 'antd';
 import { Link } from "@reach/router";
 import { Stat } from './Stat'
-
-import { YearValue, PayValue } from "../pages/SubmitReview";
 
 import ReviewCard from './ReviewCard';
 
@@ -15,29 +14,7 @@ const CompanyMeta = ({  }: {  }) => (
   </div>
 )
 
-const review = {
-  position_title: "Product Designer",
-  pay: ({
-    type: 'hourly',
-    amount: 20,
-    currency: 'USD'
-  }) as PayValue,
-  overall_rating: 3.5,
-  culture_rating: 2,
-  work_rating: 5,
-  year: ({
-    grad_level: 'undergraduate',
-    year: '3rd'
-  }) as YearValue,
-  school: 'Georgia Institute of Technology',
-  major: 'Computational Media',
-  tools: ['Illustrator', 'React'],
-  team: 'AWS',
-  company: 'Amazon',
-  timestamp: new Date()
-}
-
-const CompanyCard = ({ name, description, image }: { name: string, description: string, image: string }) =>  (
+const CompanyCard = ({ name, description, image, reviews }: { name: string, description: string, image: string, reviews: Review[] }) =>  (
   <div className="company-card">
     <div className="company-card__header">
       <div className="company-card__left">
@@ -65,7 +42,7 @@ const CompanyCard = ({ name, description, image }: { name: string, description: 
       <Link to="/">More details about this company...</Link>
     </div>
     <div className="company-card__reviews">
-      <ReviewCard {...review} />
+      {reviews.map((review, i) => <ReviewCard key={i} review={review} />)}
     </div>
   </div>
 );
