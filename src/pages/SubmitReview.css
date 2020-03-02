@@ -1,5 +1,5 @@
 .SubmitReview {
-  max-width: 600px;
+  max-width: 650px;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -41,6 +41,10 @@
   top: -10px;
 }
 
+.SubmitReview .ant-form-item-label > label {
+  height: auto;
+}
+
 @media (max-width: 475px) {
   .ant-steps-item-tail {
     display: none !important;
@@ -54,6 +58,10 @@
   .SubmitReview {
     padding: 10px;
   }
+}
+
+.SubmitReview .ant-radio-wrapper {
+  white-space: normal;
 }
 
 /* .disclaimier {

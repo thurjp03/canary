@@ -211,16 +211,16 @@ const Review = (props: ReviewProps) => {
             <Radio.Group>
               <Radio style={radioStyle} value={1} checked={review.prerequisites === 1}>
                 None - they'll teach you what you need to know
-                </Radio>
+              </Radio>
               <Radio style={radioStyle} value={2} checked={review.prerequisites === 2}>
                 Beginner - need basic knowledge/experience in this area
-                </Radio>
+              </Radio>
               <Radio style={radioStyle} value={3} checked={review.prerequisites === 3}>
                 Intermediate - need to be pretty familiar with this area
-                </Radio>
+              </Radio>
               <Radio style={radioStyle} value={4} checked={review.prerequisites === 4}>
                 Expert - need to have advanced knowledge / multiple prior experiences in this area
-                </Radio>
+              </Radio>
             </Radio.Group>
             {/* </Question> */}
             {/* <Question label="Time spent working"> */}

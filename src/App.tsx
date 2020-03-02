@@ -6,9 +6,10 @@ import Home from './pages/Home'
 
 import { Router, Link, RouteComponentProps } from "@reach/router";
 import { CookiesProvider } from 'react-cookie';
-import { Card } from 'antd';
+import { PageHeader } from 'antd';
 import SubmitReview from './pages/SubmitReview';
 import Review from './pages/Review'
+import Headroom from 'react-headroom'
 
 // interface HomeProps extends RouteComponentProps { children?: any }
 // const Home: React.SFC<HomeProps> = props => (
@@ -43,20 +44,25 @@ const App = () => {
   return (
     <CookiesProvider>
       <div className="App">
+        <Headroom>
+          <PageHeader title={<Link to="/"><img className="logo" src="https://canarystudent.com/images/canaryLogo-img.png" /></Link>} style={{ boxShadow: 'rgba(105, 47, 0, 0.25) 0 0 15px' }} ghost={false}></PageHeader>
+        </Headroom>
         <div className="background"></div>
         {/* <Router>
           <Home path="/">
             <Review path="/reviews/:reviewID"></Review>
           </Home>
         </Router> */}
-        <Link to="/">Home</Link>.
-        <Link to="/submit">Submit Review</Link>
-        <Router primary={false}>
-          <Home path="/"></Home>
-          <Review path="/reviews/:reviewID" />
-          <SubmitReview path="/submit" />
-          <ReviewNotFound path="/reviews/not-found"/>
-        </Router>
+        {/* <Link to="/">Home</Link>.
+        <Link to="/submit">Submit Review</Link> */}
+        <div className="content">
+          <Router primary={false}>
+            <Home path="/"></Home>
+            <Review path="/reviews/:reviewID" />
+            <SubmitReview path="/submit" />
+            <ReviewNotFound path="/reviews/not-found" />
+          </Router>
+        </div>
       </div>
     </CookiesProvider>
   );

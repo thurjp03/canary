@@ -3,7 +3,7 @@ import './SubmitReview.css';
 
 import { useCookies } from 'react-cookie';
 import { RouteComponentProps } from "@reach/router"
-import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Timeline, Steps, Checkbox } from 'antd/es';
+import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Rate, Steps, Checkbox } from 'antd/es';
 import { QuestionCircleOutlined, UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import { YearValue } from '../reviews';
@@ -33,6 +33,15 @@ const companySuggestions = [
   "NCR",
 ].map((option, i) => ({ value: option }))
 
+const years = ['2015', '2016', '2017', '2018', '2019', '2020']
+const semesters = ['Summer', 'Fall', 'Spring']
+
+const terms = years.reduce((acc, year) => {
+  let perm = semesters.reduce((a, semester) => [...a, semester + ' ' + year ], [] as string[])
+  return acc.concat(perm);
+}, [] as string[]).map((option, i) => <Option value={option} key={i}>{option}</Option>)
+
+
 const majors = [
   "Computer Science",
   "Computational Media",
@@ -42,8 +51,7 @@ const majors = [
 const DynamicRule = () => {
   const [form] = Form.useForm();
   const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'school', 'majors', 'year']);
-  console.log(cookies);
-
+  const [hasHousingStipend, setHasHousingStipend] = useState(false)
   const onSubmit = async () => {
     try {
       const values = await form.validateFields();
@@ -77,14 +85,17 @@ const DynamicRule = () => {
         majors: cookies.majors,
         year: cookies.year,
         remember_personal: cookies.remember_personal === 'true',
-        internship_type: 'internship'
+        internship_type: 'internship',
+
       }}
       form={form}
       layout="vertical"
       name="dynamic_rule">
       <Steps direction="vertical">
         <Steps.Step status="process" title="About you" description={<AboutYou/>} />
-        <Steps.Step status="wait" title="Internship details" description={<InternshipDetails />} />
+        <Steps.Step status="wait" title="Internship details" description={<InternshipDetails
+          hasHousingStipend={hasHousingStipend}
+          setHasHousingStipend={setHasHousingStipend} />}/>
         <Steps.Step status="wait" title="Internship experience" description={<InternshipExperience />} />
         <Steps.Step status="wait" title="Submit" description={<Submit onSubmit={onSubmit}/>} />
       </Steps>
@@ -167,7 +178,7 @@ const AboutYou = () => (
   </div>
 )
 
-const InternshipDetails = () => (
+const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
   <div className="internship-details">
     <Form.Item
       name="internship_type"
@@ -241,19 +252,329 @@ const InternshipDetails = () => (
         <Radio.Button value="no">No</Radio.Button>
       </Radio.Group>
     </Form.Item>
+    <Form.Item
+      name="terms"
+      label="Term(s) employed"
+      rules={[
+        {
+          required: true,
+          message: 'Please select the terms you were employed',
+        }
+      ]}>
+      <Select
+        mode="multiple"
+        placeholder="Please select the terms you were employed"
+        style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
+        {terms}
+      </Select>
+    </Form.Item>
+    <Form.Item
+      name="location"
+      label="Location (city/state/region)"
+      rules={[
+        {
+          required: true,
+          message: "Please input your internship's location",
+        },
+      ]}
+    >
+      <Input style={{ maxWidth: '340px' }} placeholder="Please input your internship's location" />
+    </Form.Item>
+    <Form.Item
+      name="pay"
+      label="Pay"
+      extra="Hourly, stipend, etc."
+      rules={[
+        {
+          required: true,
+          message: "Please input your pay",
+        },
+      ]}
+    >
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your pay" />
+    </Form.Item>
+    <Form.Item
+      label="Housing stipend">
+      <Radio.Group defaultValue="none" onChange={e => setHasHousingStipend(e.target.value === 'yes')}>
+        <Radio.Button value="none">None</Radio.Button>
+        <Radio.Button value="yes">Yes</Radio.Button>
+      </Radio.Group>
+      {hasHousingStipend && (
+        <Form.Item name="housing_stipend" noStyle rules={[{ required: true }]}>
+          <Input style={{ maxWidth: '250px' }} placeholder="Please input your housing stipend" />
+        </Form.Item>)
+      }
+    </Form.Item>
+
+    <Form.Item
+      name="offer"
+      label="Did you accept a full-time offer here?"
+      rules={[
+        {
+          required: true,
+          message: "Please select an option",
+        },
+      ]}>
+      <Radio.Group>
+        <Radio style={verticalStyle} value={1}>
+          Yes
+        </Radio>
+        <Radio style={verticalStyle} value={2}>
+          Offered, but declined
+        </Radio>
+        <Radio style={verticalStyle} value={3}>
+          Not offered
+        </Radio>
+        <Radio style={verticalStyle} value={4}>
+          Not applicable (e.g. it's too early)
+        </Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      noStyle
+      shouldUpdate={(prevValues, currentValues) => prevValues.offer !== currentValues.offer}
+    >
+      {({ getFieldValue }) => {
+        return (getFieldValue('offer') && getFieldValue('offer') > 2) ? (
+          <Form.Item name="would_offer" label="Would you accept a full-time offer here?" rules={[{ required: true }]}>
+            <Radio.Group>
+              <Radio.Button value="no">No</Radio.Button>
+              <Radio.Button value="yes">Yes</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        ) : <div></div>;
+      }}
+    </Form.Item>
   </div>
 )
 
 const InternshipExperience = () => (
   <div className="internship-experience">
-    
+    <Form.Item
+      name="expectations"
+      label="How did your experience compare to your expectations?"
+      rules={[
+        {
+          required: true,
+          message: "Please select an option",
+        },
+      ]}>
+      <Radio.Group>
+        <Radio style={verticalStyle} value={1}>
+          It was what I expected
+        </Radio>
+        <Radio style={verticalStyle} value={2}>
+          It was better
+        </Radio>
+        <Radio style={verticalStyle} value={3}>
+          It was worse
+        </Radio>
+        <Radio style={verticalStyle} value={4}>
+          Not better or worse, just different
+        </Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      noStyle
+      shouldUpdate={(prevValues, currentValues) => prevValues.expectations !== currentValues.expectations}
+    >
+      {({ getFieldValue }) => {
+        return getFieldValue('expectations') && getFieldValue('expectations') > 1 ? (
+          <Form.Item name="expectations_description" label="How was it different?" rules={[{ required: true }]}>
+            <Input.TextArea rows={2} />
+          </Form.Item>
+        ) : <div></div>;
+      }}
+    </Form.Item>
+    <Form.Item
+      name="impact"
+      label="Impact of your work"
+      rules={[
+        {
+          required: true,
+          message: "Please select an option",
+        },
+      ]}>
+      <Radio.Group>
+        <Radio style={verticalStyle} value={1}>
+          No impact (busy-work)
+        </Radio>
+        <Radio style={verticalStyle} value={2}>
+          Not very impactful
+        </Radio>
+        <Radio style={verticalStyle} value={3}>
+          Somewhat impactful
+        </Radio>
+        <Radio style={verticalStyle} value={4}>
+          Impactful
+        </Radio>
+        <Radio style={verticalStyle} value={5}>
+          Very impactful
+        </Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="prerequisites"
+      label="How much knowledge or experience was needed going in?"
+      rules={[
+        {
+          required: true,
+          message: "Please select an option",
+        },
+      ]}>
+      <Radio.Group>
+        <Radio style={verticalStyle} value={1}>
+          None - they'll teach you what you need to know
+        </Radio>
+        <Radio style={verticalStyle} value={2}>
+          Beginner - need basic knowledge/experience in this area
+        </Radio>
+        <Radio style={verticalStyle} value={3}>
+          Intermediate - need to be pretty familiar with this area
+        </Radio>
+        <Radio style={verticalStyle} value={4}>
+          Expert - need to have advanced knowledge / multiple prior experiences in this area
+        </Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="work_time"
+      label="How much of your time were you actively working? (versus waiting for work)"
+      rules={[
+        {
+          required: true,
+          message: "Please select an option",
+        },
+      ]}>
+      <Radio.Group>
+        <Radio style={verticalStyle} value={1}>
+          0-20% (I might as well have done nothing)
+        </Radio>
+        <Radio style={verticalStyle} value={2}>
+          20-40% (I worked some, but there was a ton of down time)
+          </Radio>
+        <Radio style={verticalStyle} value={3}>
+          40-60% (Some days I stayed busy, but there was a good bit of down time)
+          </Radio>
+        <Radio style={verticalStyle} value={4}>
+          60-80% (I stayed pretty busy)
+          </Radio>
+        <Radio style={verticalStyle} value={5}>
+          80-100% (I was more or less busy the whole time)
+          </Radio>
+      </Radio.Group>
+    </Form.Item>
+    <Form.Item
+      name="tools_often"
+      label="Software/Tools used all the time"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your major(s)',
+        },
+      ]}
+    >
+      <Select
+        mode="tags"
+        placeholder="Please input your major(s)"
+        style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
+        {majors}
+      </Select>
+    </Form.Item>
+    <Form.Item
+      name="tools_occasionally"
+      label="Software/Tools used occasionally"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your major(s)',
+        },
+      ]}
+    >
+      <Select
+        mode="tags"
+        placeholder="Please input your major(s)"
+        style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
+        {majors}
+      </Select>
+    </Form.Item>
+    <Form.Item
+      name="work_rating"
+      label="Rate the quality of work (1 = boring and useless, 10 = fascinating and engaging)" rules={[
+        {
+          required: true,
+          message: "Please rate your work experience",
+        }
+      ]}>
+
+      <Rate count={10} />
+    </Form.Item>
+    <Form.Item
+      name="culture_rating"
+      label="Rate the company culture (1 = toxic and Discouraging, 10 = warm and Inspiring)" rules={[
+        {
+          required: true,
+          message: "Please rate your company's culture",
+        }
+      ]}>
+
+      <Rate count={10} />
+    </Form.Item>
+    <Form.Item
+      name="overall_rating"
+      label="Rate the overall experience" rules={[
+        {
+          required: true,
+          message: "Please rate your overall experience",
+        }
+      ]}>
+
+      <Rate count={10} />
+    </Form.Item>
+    <Form.Item
+      name="description"
+      label="Describe your internship."
+      rules={[
+        {
+          required: true,
+          message: "Please describe your internship",
+        }
+      ]}>
+      <Input.TextArea placeholder="What did you do? What projects did you work on? What did your day-to-day look like?" rows={3}></Input.TextArea>
+    </Form.Item>
+    <Form.Item
+      name="recommend"
+      label="Would recommend it to people who..."
+      rules={[
+        {
+          required: true,
+          message: "Please describe who you would recommend this internship to",
+        }  
+      ]}>
+      <Input />
+    </Form.Item>
+    <Form.Item
+      name="not_recommend"
+      label={<span>Would <b>NOT</b> recommend it to people who...</span>}
+      rules={[
+        {
+          required: true,
+          message: "Please describe who you would NOT recommend this internship to",
+        }
+      ]}>
+      <Input />
+    </Form.Item>
+    <Form.Item
+      name="additional_comments"
+      label="(Optional) Closing remarks/advice">
+      <Input.TextArea rows={3}></Input.TextArea>
+    </Form.Item>
   </div>
 )
 
 const verticalStyle = {
-  display: 'block',
-  height: '30px',
   lineHeight: '30px',
+  display: 'block',
 }
 
 const Submit = ({ onSubmit }) => (
@@ -305,10 +626,10 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
 
   const onGradLevelChange = e => {
     let newVal = e.target.value;
-    if (!('gradLevel' in value)) {
+    if (!('grad_level' in value)) {
       setGradLevel(newVal);
     }
-    triggerChange({ gradLevel: newVal });
+    triggerChange({ grad_level: newVal });
   };
 
   const onCurrencyChange = e => {

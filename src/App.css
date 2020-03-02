@@ -2,8 +2,15 @@
 /* @import '~antd/dist/antd.css'; */
 
 .App {
-  padding: 20px;
   font-family: 'Source Sans Pro', sans-serif;
+}
+
+.App > .content {
+  padding: 20px;
+}
+
+.logo {
+  height: 40px;
 }
 
 .background {
@@ -38,10 +45,12 @@
 }
 
 @media (max-width: 575px) {
-  .App {
-    padding: 5px;
+  .App > .content {
+    padding: 15px 5px 5px;
   }
 }
 
-
+.headroom {
+  z-index: 10 !important;
+}
 /* ffb300 */
