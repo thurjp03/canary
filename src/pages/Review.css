@@ -133,6 +133,9 @@
     grid-template-columns: auto;
     gap: 15px;
   }
+  .review__ratings .stat:not(.review__overall-rating) {
+    text-align: right;
+  }
 }
 
 .review__long {

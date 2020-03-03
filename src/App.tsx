@@ -4,12 +4,14 @@ import './App.css';
 
 import Home from './pages/Home'
 
-import { Router, Link, RouteComponentProps } from "@reach/router";
+import { Router, Link, RouteComponentProps, navigate } from "@reach/router";
 import { CookiesProvider } from 'react-cookie';
-import { PageHeader } from 'antd';
+import { PageHeader, Button, Menu  } from 'antd';
 import SubmitReview from './pages/SubmitReview';
 import Review from './pages/Review'
 import Headroom from 'react-headroom'
+
+import logo from './images/canaryLogo-img.png';
 
 // interface HomeProps extends RouteComponentProps { children?: any }
 // const Home: React.SFC<HomeProps> = props => (
@@ -40,12 +42,20 @@ const ReviewNotFound: React.SFC<RouteComponentProps> = props => (
   </div>
 )
 
+const { SubMenu } = Menu;
+
+  // < PageHeader title = {< Link to = "/" > <img className="logo" src={logo} /></Link>}></PageHeader >
+
 const App = () => {
   return (
     <CookiesProvider>
       <div className="App">
         <Headroom>
-          <PageHeader title={<Link to="/"><img className="logo" src="https://canarystudent.com/images/canaryLogo-img.png" /></Link>} style={{ boxShadow: 'rgba(105, 47, 0, 0.25) 0 0 15px' }} ghost={false}></PageHeader>
+          < Link to="/" style={{margin: 'auto 30px'}} > <img className="logo" src={logo}/></Link>
+          <Menu style={{height: "100%", marginTop: 'auto'}} mode="horizontal" selectedKeys={['submit']}>
+            <Menu.Item key="submit"><Link to="/submit">✎ Write a review</Link></Menu.Item>
+            <Menu.Item key="about"><Link to="/about">About</Link></Menu.Item>
+          </Menu>
         </Headroom>
         <div className="background"></div>
         {/* <Router>
