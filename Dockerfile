@@ -1,21 +1,20 @@
 # base image
-FROM node:latest
+FROM node:13.8
 
 # set working directory
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
+# install app
 COPY . /app/
 
-# install and cache app dependencies
-COPY package.json /app/package.json
-#RUN npm install --silent
+# install dependencies
 RUN npm install
-#RUN npm install react-scripts@3.0.1 -g --silent
+RUN yarn install
+
+# prepare for ~production~
 RUN yarn build
 
+# open TCP port for development server
 EXPOSE 3000
 
 # start app
