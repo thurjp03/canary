@@ -43,7 +43,7 @@ const ReviewCard = ({ review, note="" }: ReviewCardProps) => {
             {review.pay}
           </Stat>
           <Stat title="Tools">
-            <span className="review-card__tool">{review.tools.often}</span>
+            <span className="review-card__tool">{review.tools.often.slice(0, 3).join(', ')}</span>
           </Stat>
           <Stat title="Major">
             {review.major}

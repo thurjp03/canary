@@ -466,36 +466,54 @@ const InternshipExperience = () => (
     </Form.Item>
     <Form.Item
       name="tools_often"
-      label="Software/Tools used all the time"
+      label="Software/Tools you used most often"
       rules={[
         {
           required: true,
-          message: 'Please input your major(s)',
+          message: 'Please input the tools(s) you used often',
         },
       ]}
     >
       <Select
         mode="tags"
-        placeholder="Please input your major(s)"
+        placeholder="Please input the tools(s) you used often"
+        dropdownStyle={{ display: 'none' }}
         style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
-        {majors}
+        
       </Select>
     </Form.Item>
     <Form.Item
       name="tools_occasionally"
-      label="Software/Tools used occasionally"
+      label="Software/Tools you used occasionally"
       rules={[
         {
-          required: true,
-          message: 'Please input your major(s)',
+          message: 'Please input the tools(s) you used occasionally',
         },
       ]}
     >
       <Select
         mode="tags"
-        placeholder="Please input your major(s)"
+        dropdownStyle={{ display: 'none' }}
+        placeholder="Please input the tools(s) you used occasionally"
         style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
-        {majors}
+        
+      </Select>
+    </Form.Item>
+    <Form.Item
+      name="tools_rarely"
+      label="Software/Tools you used rarely"
+      rules={[
+        {
+          message: 'Please input the tools(s) you used rarely',
+        },
+      ]}
+    >
+      <Select
+        mode="tags"
+        dropdownStyle={{display: 'none'}}
+        placeholder="Please input the tools(s) you used rarely"
+        style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
+        
       </Select>
     </Form.Item>
     <Form.Item

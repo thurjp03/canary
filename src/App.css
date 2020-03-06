@@ -52,7 +52,6 @@
 
 .headroom {
   z-index: 10 !important;
-  display: flex;
   background: #fff;
   height: 60px;
 }
@@ -70,4 +69,8 @@
   /* height: 100%; */
   line-height: 58px;
   font-size: 16px;
+}
+
+nav {
+  display: flex;
 }

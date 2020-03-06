@@ -56,10 +56,28 @@
   margin: 10px 10px 0 10px;
 }
 
+.review__ratings .ant-rate {
+  font-size: 28px;
+  line-height: 0.9;
+}
+
 .review__overall-rating {
-  position: relative;
+  
   grid-area: overall;
   margin: 0;
+}
+
+.review__overall-rating .stat__content {
+  position: relative;
+}
+
+.review__overall-rating h2 {
+  font-size: 29.3344px;
+  font-weight: 700;
+  position: absolute;
+  transform: translate( -50%, -50%);
+  top: 50%;
+  left: 50%;
 }
 
 .review__culture-rating {

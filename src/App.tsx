@@ -4,12 +4,14 @@ import './App.css';
 
 import Home from './pages/Home'
 
-import { Router, Link, RouteComponentProps, navigate } from "@reach/router";
+import { Router, Link, RouteComponentProps, navigate, Location, LocationProps, LocationProviderRenderFn, LocationContext } from "@reach/router";
+import { InfoCircleOutlined, BarsOutlined, MenuOutlined } from '@ant-design/icons';
 import { CookiesProvider } from 'react-cookie';
-import { PageHeader, Button, Menu  } from 'antd';
+import { Button, Menu, Dropdown  } from 'antd';
 import SubmitReview from './pages/SubmitReview';
 import Review from './pages/Review'
 import Headroom from 'react-headroom'
+import { useMediaQuery } from 'react-responsive'
 
 import logo from './images/canaryLogo-img.png';
 
@@ -46,16 +48,67 @@ const { SubMenu } = Menu;
 
   // < PageHeader title = {< Link to = "/" > <img className="logo" src={logo} /></Link>}></PageHeader >
 
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <Link to="/"><BarsOutlined /> Reviews</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to="/submit">✎  Write a review</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to="/about"><InfoCircleOutlined /> About</Link>
+    </Menu.Item>
+  </Menu>
+);
+
+const DropdownMenu = () => {
+  return (
+    <div style={{ margin: '15px 15px 10px auto' }}>
+      <Dropdown key="more" overlay={menu}>
+        <Button
+          style={{
+            border: 'none',
+            padding: 0,
+          }}
+        >
+          <MenuOutlined
+            style={{
+              fontSize: 20,
+              verticalAlign: 'top',
+            }}
+          />
+        </Button>
+      </Dropdown>
+    </div>
+  );
+};
+
 const App = () => {
+  // const isSmall = useMediaQuery({ query: '(max-width: 630px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
   return (
     <CookiesProvider>
       <div className="App">
         <Headroom>
-          < Link to="/" style={{margin: 'auto 30px'}} > <img className="logo" src={logo}/></Link>
-          <Menu style={{height: "100%", marginTop: 'auto'}} mode="horizontal" selectedKeys={['submit']}>
-            <Menu.Item key="submit"><Link to="/submit">✎ Write a review</Link></Menu.Item>
-            <Menu.Item key="about"><Link to="/about">About</Link></Menu.Item>
-          </Menu>
+          <Location>
+            {context => (
+              <nav>
+                {console.log(context.location)}
+                < Link to="/" style={{ margin: 'auto 30px' }} > <img className="logo" src={logo} /></Link>
+                {
+                  isMobile ?
+                    <DropdownMenu />
+                    :
+                    <Menu style={{ height: "100%", marginTop: 'auto' }} mode="horizontal" selectedKeys={[context.location.pathname.replace('/', '')||'reviews']}>
+                      <Menu.Item key="reviews"><Link to="/"><BarsOutlined /> Reviews</Link></Menu.Item>
+                      <Menu.Item key="submit"><Link to="/submit">✎ Write a review</Link></Menu.Item>
+                      <Menu.Item key="about"><Link to="/about"><InfoCircleOutlined /> About</Link></Menu.Item>
+                    </Menu>
+                }
+              </nav>
+            )}
+          </Location>
         </Headroom>
         <div className="background"></div>
         {/* <Router>
