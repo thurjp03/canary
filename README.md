@@ -42,3 +42,23 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Production Packaging
+
+To package this application for production, build a Docker image.
+
+```
+docker build . --tag=spettway/canary
+```
+
+You can briefly test this on your workstation before publishing.
+
+```
+docker run -p 3000:3000 spettway/canary
+```
+
+If that looks good, you can push the image up to a registry. You may need to set up an account on that registry and configure your Docker environment, especially if that registry is Docker Hub.
+
+```
+docker push spettway/canary
+```
