@@ -17,9 +17,14 @@ const Home = (props: HomeProps) => {
         <h1>Don't go into your internship <b>blind</b></h1>
         {/* <p className="jumbotron__subtitle">Read reviews from other students about their internship and co-op experiences, so you can find an experience you'll love.</p> */}
         <div className="jumbotron__review">
-          {/* Empower your peers &ensp; */}
+          Empower your peers &ensp; <Button type="primary">✎ Write a Review</Button>
         </div>
       </div>
+      {/* <div className="write-review">
+        Empower your fellow students:
+        <br/>
+        <Button type="primary">Write a Review</Button>
+      </div> */}
       <div className="reviews">
         {reviews.slice(0, 10).map((review, i) => <CompanyCard key={i} name={review.company.name} image={review.company.image} description={review.company.description} reviews={[review]}/>)}
       </div>
