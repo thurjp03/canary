@@ -17,7 +17,7 @@ const Home = (props: HomeProps) => {
         <h1>Don't go into your internship <b>blind</b></h1>
         {/* <p className="jumbotron__subtitle">Read reviews from other students about their internship and co-op experiences, so you can find an experience you'll love.</p> */}
         <div className="jumbotron__review">
-          Empower your peers &ensp; <Button type="primary">✎ Write a Review</Button>
+          Empower your peers &ensp; <Button type="primary" onClick={() => navigate('/submit')}>✎ Write a Review</Button>
         </div>
       </div>
       {/* <div className="write-review">
