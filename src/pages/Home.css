@@ -6,11 +6,30 @@
   margin: 0 auto;
 }
 
+.search {
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+.search .ant-input-search {
+  border-radius: 5px;
+  padding: 10px;
+  background: #fff;
+  border-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 0 15px;
+}
+
+.search .ant-input-search input {
+  background: #fff;
+}
+
 .jumbotron {
   max-width: 1140px;
   margin: 0 auto 30px auto;
   padding: 40px 20px;
   font-size: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .jumbotron h1 {
@@ -18,6 +37,12 @@
   font-size: 7vh;
   line-height: 1.3;
   margin: 0 0 10px 0;
+  display: block;
+}
+
+.jumbotron__content {
+  display: inline-block;
+  position: relative;
 }
 
 .jumbotron h1 b {
@@ -29,7 +54,10 @@
 }
 
 .jumbotron__review {
-  text-align: right;
+  /* text-align: right; */
+  position: absolute;
+  top: 100%;
+  right: 0;
 }
 
 .jumbotron__review .ant-btn {
@@ -40,6 +68,7 @@
   .jumbotron {
     font-size: 16px;
     padding: 0 20px;
+    margin-bottom: 50px;
   }
 }
 
