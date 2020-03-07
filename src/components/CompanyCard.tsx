@@ -26,7 +26,7 @@ const CompanyCard = ({ name, description, image, reviews }: { name: string, desc
       </div>
       <div className="company-card__right">
         {/* <div className="company-card__stats"> */}
-          <Stat title="Overall">
+          {/* <Stat title="Overall">
             4.32
           </Stat>
           <Stat title="Culture">
@@ -34,12 +34,12 @@ const CompanyCard = ({ name, description, image, reviews }: { name: string, desc
           </Stat>
           <Stat title="Work">
             4.32
-          </Stat>
+          </Stat> */}
         {/* </div> */}
       </div>
     </div>
     <div className="company-card__more">
-      <Link to="/">More details about this company...</Link>
+      {/* <Link to="/">More details about this company...</Link> */}
     </div>
     <div className="company-card__reviews">
       {reviews.map((review, i) => <ReviewCard key={i} review={review} />)}

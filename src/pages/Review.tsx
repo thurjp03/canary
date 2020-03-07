@@ -10,7 +10,7 @@ import { useMediaQuery } from 'react-responsive'
 
 import { reviews } from '../reviews'
 
-const rateColor = value => value > 3.5 ? '#2FF495' : value > 1.5 ? '#F9E02B' : '#F23E30'; //2FF495 30ADF2
+const rateColor = value => value > 3.5 ? '#2FF495' : value > 2 ? '#F9E02B' : '#F23E30'; //2FF495 30ADF2
 
 const Question: React.SFC<{ label: string, className?: string } > = ({ label, className = "", children }) => (
   <div className={"question" + className}>
@@ -48,15 +48,14 @@ const Review = (props: ReviewProps) => {
       </div>
       <div className="review__ratings">
         <Stat title="Overall rating" className="review__overall-rating">
+          <div style={{ position: 'relative', width: '90px', height: '90px' }}>
             <svg version="1.1" x="0px" y="0px" width="70px"
-            height="70px" viewBox="0 0 70 70" style={{margin: '10px'}}>
-            <path style={{ fill: rateColor(review.overall_rating) }}
-              d="M35,70C15.67,70,0,54.33,0,35S15.67,0,35,0s35,15.67,35,35L35,70z" />
-            <text transform="matrix(1 0 0 1 16.916 43.1436)" style={{
-              fontSize: '29.3344px',
-              fontWeight: 700,
-            }}>{review.overall_rating}</text>
+              height="70px" viewBox="0 0 70 70" style={{ margin: '10px' }}>
+              <path style={{ fill: rateColor(review.overall_rating) }}
+                d="M35,70C15.67,70,0,54.33,0,35S15.67,0,35,0s35,15.67,35,35L35,70z" />
             </svg>
+            <h2>{review.overall_rating}</h2>
+          </div>
         </Stat>
         <Stat title="Culture rating" className="review__culture-rating">
           <Rate character="●" style={{ color: rateColor(review.culture_rating) }} value={review.culture_rating} disabled allowHalf />
@@ -73,7 +72,7 @@ const Review = (props: ReviewProps) => {
               <Question label="Major">{review.major}</Question>
               <Question label="Year">{review.year.grad_level ? review.year.grad_level.charAt(0).toUpperCase() + review.year.grad_level.substring(1) : ''}, {review.year.year} year</Question>
               <Question label="School">{review.school}</Question>
-              <Question label="Other areas of study">{review.other_studies}</Question>
+              {review.other_studies && <Question label="Other areas of study">{review.other_studies}</Question>}
             </div>
             <div className="review__compensation">
               <h4>Compensation</h4>
@@ -92,20 +91,33 @@ const Review = (props: ReviewProps) => {
               <h4>Tools Used</h4>
               <div className="review__tools-content">
                 {review.tools.often.length > 0 && <Question label="Used all the time" className="review__tools-always">
-                  {review.tools.often}
+                  {review.tools.often.join(', ')}
                 </Question>}
                 {review.tools.occasionally.length > 0 && <Question label="Used occasionally" className="review__tools-occasionally">
-                  {review.tools.occasionally}
+                  {review.tools.occasionally.join(', ')}
                 </Question>}
                 {review.tools.rarely.length > 0 && <Question label="Used a little" className="review__tools-little">
-                  {review.tools.rarely}
+                  {review.tools.rarely.join(', ')}
                 </Question>}
               </div>
             </div>
             <div className="review__future">
               <h4>Offers</h4>
-              <Question label="Offered full time offer?">{review.offer}</Question>
-              {review.offer !== 'Yes' && <Question label="Would accept full time offer?">{review.would_offer}</Question>}
+              <Question label="Offered full time position?">{[
+                'Yes',
+                'Offered, but declined',
+                'Not offered',
+                'Not applicable (e.g. too early)'
+              ][review.offer]}</Question>
+              {review.offer !== 0 &&
+                <Question label="Would accept full time offer?">
+                  {[
+                    'Yes, definitely',
+                    'Maybe, I probably would',
+                    'Maybe, but probably not',
+                    'No, definitely not'
+                  ][review.would_accept_offer]}
+                </Question>}
               {/* <Question label="Other benefits">
               {review.benefits ? review.benefits : 'None'}
             </Question> */}
@@ -117,7 +129,7 @@ const Review = (props: ReviewProps) => {
               <Question label="Major">{review.major}</Question>
               <Question label="Year">{review.year.grad_level ? review.year.grad_level.charAt(0).toUpperCase() + review.year.grad_level.substring(1) : ''}, {review.year.year} year</Question>
               <Question label="School">{review.school}</Question>
-              <Question label="Other areas of study">{review.other_studies}</Question>
+              {review.other_studies && <Question label="Other areas of study">{review.other_studies}</Question>}
             </Collapse.Panel>
             <Collapse.Panel header={<h4>Compensation</h4>} key="2">
               <Question label="Pay">
@@ -130,18 +142,31 @@ const Review = (props: ReviewProps) => {
             </Collapse.Panel>
             <Collapse.Panel header={<h4>Tools Used</h4>} key="3">
               {review.tools.often.length > 0 && <Question label="Used all the time" className="review__tools-always">
-                {review.tools.often}
+                {review.tools.often.join(', ')}
               </Question>}
               {review.tools.occasionally.length > 0 && <Question label="Used occasionally" className="review__tools-occasionally">
-                {review.tools.occasionally}
+                {review.tools.occasionally.join(', ')}
               </Question>}
               {review.tools.rarely.length > 0 && <Question label="Used a little" className="review__tools-little">
-                {review.tools.rarely}
+                {review.tools.rarely.join(', ')}
               </Question>}
             </Collapse.Panel>
             <Collapse.Panel header={<h4>Fulltime Offer</h4>} key="4">
-              <Question label="Offered full time offer?">{review.offer}</Question>
-              {review.offer !== 'Yes' && <Question label="Would accept full time offer?">{review.would_offer}</Question>}
+              <Question label="Offered full time position?">{[
+                'Yes',
+                'Offered, but declined',
+                'Not offered',
+                'Not applicable (e.g. too early)'
+              ][review.offer]}</Question>
+              {review.offer !== 0 &&
+                <Question label="Would accept full time offer?">
+                  {[
+                    'Yes, definitely',
+                    'Maybe, I probably would',
+                    'Maybe, but probably not',
+                    'No, definitely not'
+                  ][review.would_accept_offer]}
+                </Question>}
             </Collapse.Panel>
           </Collapse>
         }
@@ -166,16 +191,16 @@ const Review = (props: ReviewProps) => {
             <h4>Did the job meet your expectations?</h4>
             {/* <Question label="Did the job meet your expectations?"> */}
             <Radio.Group>
-              <Radio style={radioStyle} value={1} checked={review.expectations === 1}>
+              <Radio style={radioStyle} value={0} checked={review.expectations === 0}>
                 It was what I expected
                 </Radio>
-              <Radio style={radioStyle} value={2} checked={review.expectations === 2}>
+              <Radio style={radioStyle} value={1} checked={review.expectations === 1}>
                 It was better
                 </Radio>
-              <Radio style={radioStyle} value={3} checked={review.expectations === 3}>
+              <Radio style={radioStyle} value={2} checked={review.expectations === 2}>
                 It was worse
                 </Radio>
-              <Radio style={radioStyle} value={4} checked={review.expectations === 4}>
+              <Radio style={radioStyle} value={3} checked={review.expectations === 3}>
                 Not better or worse, just different
                 </Radio>
             </Radio.Group>
@@ -189,19 +214,19 @@ const Review = (props: ReviewProps) => {
 
             <h4>Impact of work</h4>
             <Radio.Group>
-              <Radio style={radioStyle} value={1} checked={review.impact === 1}>
+              <Radio style={radioStyle} value={0} checked={review.impact === 0}>
                 No impact (busy-work)
                 </Radio>
-              <Radio style={radioStyle} value={2} checked={review.impact === 2}>
+              <Radio style={radioStyle} value={1} checked={review.impact === 1}>
                 Not very impactful
                 </Radio>
-              <Radio style={radioStyle} value={3} checked={review.impact === 3}>
+              <Radio style={radioStyle} value={2} checked={review.impact === 2}>
                 Somewhat impactful
                 </Radio>
-              <Radio style={radioStyle} value={4} checked={review.impact === 4}>
+              <Radio style={radioStyle} value={3} checked={review.impact === 3}>
                 Impactful
                 </Radio>
-              <Radio style={radioStyle} value={5} checked={review.impact === 5}>
+              <Radio style={radioStyle} value={5} checked={review.impact === 4}>
                 Very impactful
                 </Radio>
             </Radio.Group>
@@ -209,16 +234,16 @@ const Review = (props: ReviewProps) => {
             {/* <Question label="How much knowledge or experience was needed going in (pre-requisites)?"> */}
             <h4>How much knowledge or experience was needed going in (pre-requisites)?</h4>
             <Radio.Group>
-              <Radio style={radioStyle} value={1} checked={review.prerequisites === 1}>
+              <Radio style={radioStyle} value={0} checked={review.prerequisites === 0}>
                 None - they'll teach you what you need to know
               </Radio>
-              <Radio style={radioStyle} value={2} checked={review.prerequisites === 2}>
+              <Radio style={radioStyle} value={1} checked={review.prerequisites === 1}>
                 Beginner - need basic knowledge/experience in this area
               </Radio>
-              <Radio style={radioStyle} value={3} checked={review.prerequisites === 3}>
+              <Radio style={radioStyle} value={2} checked={review.prerequisites === 2}>
                 Intermediate - need to be pretty familiar with this area
               </Radio>
-              <Radio style={radioStyle} value={4} checked={review.prerequisites === 4}>
+              <Radio style={radioStyle} value={4} checked={review.prerequisites === 3}>
                 Expert - need to have advanced knowledge / multiple prior experiences in this area
               </Radio>
             </Radio.Group>
@@ -226,19 +251,19 @@ const Review = (props: ReviewProps) => {
             {/* <Question label="Time spent working"> */}
             <h4>Time spent working</h4>
             <Radio.Group>
-              <Radio style={radioStyle} value={1} checked={review.work_time === 1}>
+              <Radio style={radioStyle} value={0} checked={review.work_time === 0}>
                 0-20% (I might as well have done nothing)
                 </Radio>
-              <Radio style={radioStyle} value={2} checked={review.work_time === 2}>
+              <Radio style={radioStyle} value={1} checked={review.work_time === 1}>
                 20-40% (I worked some, but there was a ton of down time)
                 </Radio>
-              <Radio style={radioStyle} value={3} checked={review.work_time === 3}>
+              <Radio style={radioStyle} value={2} checked={review.work_time === 2}>
                 40-60% (Some days I stayed busy, but there was a good bit of down time)
                 </Radio>
-              <Radio style={radioStyle} value={4} checked={review.work_time === 4}>
+              <Radio style={radioStyle} value={3} checked={review.work_time === 3}>
                 60-80% (I stayed pretty busy)
                 </Radio>
-              <Radio style={radioStyle} value={5} checked={review.work_time === 5}>
+              <Radio style={radioStyle} value={4} checked={review.work_time === 4}>
                 80-100% (I was more or less busy the whole time)
                 </Radio>
             </Radio.Group>
