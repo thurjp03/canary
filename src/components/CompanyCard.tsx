@@ -2,9 +2,8 @@ import React from 'react';
 import './CompanyCard.css';
 
 import { Review } from '../reviews'
-import { Card, Rate, Tooltip } from 'antd';
-import { Link } from "@reach/router";
-import { Stat } from './Stat'
+// import { Link } from "@reach/router";
+// import { Stat } from './Stat'
 
 import ReviewCard from './ReviewCard';
 
@@ -14,11 +13,11 @@ const CompanyMeta = ({  }: {  }) => (
   </div>
 )
 
-const CompanyCard = ({ name, description, image, reviews }: { name: string, description: string, image: string, reviews: Review[] }) =>  (
+const CompanyCard = ({ name, description, image, reviews }: { name: string, description: string, image?: string, reviews: Review[] }) =>  (
   <div className="company-card">
     <div className="company-card__header">
       <div className="company-card__left">
-        <img src={image} alt={name} className="company-card__img" />
+        {image && <img src={image} alt={name} className="company-card__img" />}
         <span className="company-card__title">
           <h2 className="company-card__name">{name}</h2>
           <div className="company-card__description">{description}</div>

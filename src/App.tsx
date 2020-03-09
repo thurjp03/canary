@@ -4,43 +4,68 @@ import './App.css';
 
 import Home from './pages/Home'
 
-import { Router, Link, RouteComponentProps, navigate, Location, LocationProps, LocationProviderRenderFn, LocationContext } from "@reach/router";
+import { Router, Link, RouteComponentProps, Location, navigate } from "@reach/router";
 import { InfoCircleOutlined, BarsOutlined, MenuOutlined } from '@ant-design/icons';
 import { CookiesProvider } from 'react-cookie';
-import { Button, Menu, Dropdown  } from 'antd';
+import { Button, Menu, Dropdown, Result, BackTop } from 'antd';
 import SubmitReview from './pages/SubmitReview';
 import Review from './pages/Review'
-import Headroom from 'react-headroom'
+// import Headroom from 'react-headroom'
 import { useMediaQuery } from 'react-responsive'
 
 import logo from './images/canaryLogo-img.png';
 
-// interface HomeProps extends RouteComponentProps { children?: any }
-// const Home: React.SFC<HomeProps> = props => (
-//   <div className="home">
-//     <h1>Home</h1>
-//     <Link to="/reviews/1">Review 1</Link>
-//     <Link to="/reviews/2">Review 2</Link>
-//     {props.children}
-//   </div>
-// )
+// import { database } from './database';
+// import { reviews } from './reviews'
 
-// const reviews = [
-//   { a: 'test1', b: 'test3' },
-//   { a: 'test2', b: 'test4' },
-// ]
+// reviews.forEach(review => {
+//   database.collection('review').doc(review.id).set(review).then(() => {
+//     console.log('success');
+    
+//   }).catch(err => {
+//     console.log('fail');
+    
+//   })
+// })
 
-// interface ReviewProps extends RouteComponentProps { reviewID?: number }
-// const Review: React.SFC<ReviewProps> = props => { 
-//   const review = props.reviewID ? reviews[props.reviewID - 1]: ({a: 'fail', b: ''});
-//   return (
-//     <div className="review">{review.a} {review.b}</div>
-//   )
-// }
+// database.collection("review").orderBy("Position").startAt("4140-").endAt("4140-\uf8ff").get().then(snap => {
+//   snap.forEach(doc => {
+//     console.log(doc.data());
+//   })
+// }).catch(error => {
+//   console.log("Error getting document:", error);
+// });
 
 const ReviewNotFound: React.SFC<RouteComponentProps> = props => (
   <div className="not-found">
-    <h1>Review not found</h1>
+    <Result
+      status='error'
+      title="Review not found"
+      subTitle="Sorry, we can't find that review."
+      extra={<Button onClick={() => navigate('/')}>Back Home</Button>}
+    />
+  </div>
+)
+
+const ReviewSuccess: React.SFC<RouteComponentProps> = props => (
+  <div className="submit-success">
+    <Result
+      status='success'
+      title="Review Submitted!"
+      subTitle="Thank you for helping your fellow student!"
+      extra={<Button onClick={() => navigate('/submit')}>Write another review</Button>}
+    />
+  </div>
+)
+
+const ReviewError: React.SFC<RouteComponentProps> = props => (
+  <div className="submit-error">
+    <Result
+      status='error'
+      title="Review not found"
+      subTitle="Sorry, there was an error submitting your review."
+      extra={<Button onClick={() => navigate('/submit')}>Try Again</Button>}
+    />
   </div>
 )
 
@@ -56,9 +81,9 @@ const menu = (
     <Menu.Item>
       <Link to="/submit">✎  Write a review</Link>
     </Menu.Item>
-    <Menu.Item>
+    {/* <Menu.Item>
       <Link to="/about"><InfoCircleOutlined /> About</Link>
-    </Menu.Item>
+    </Menu.Item> */}
   </Menu>
 );
 
@@ -90,11 +115,11 @@ const App = () => {
   return (
     <CookiesProvider>
       <div className="App">
-        <Headroom>
+        {/* <Headroom> */}
+        <div className="headroom">
           <Location>
             {context => (
               <nav>
-                {console.log(context.location)}
                 < Link to="/" style={{ margin: 'auto 30px' }} > <img className="logo" src={logo} /></Link>
                 {
                   isMobile ?
@@ -103,14 +128,16 @@ const App = () => {
                     <Menu style={{ height: "100%", marginTop: 'auto' }} mode="horizontal" selectedKeys={[context.location.pathname.replace('/', '')||'reviews']}>
                       <Menu.Item key="reviews"><Link to="/"><BarsOutlined /> Reviews</Link></Menu.Item>
                       <Menu.Item key="submit"><Link to="/submit">✎ Write a review</Link></Menu.Item>
-                      <Menu.Item key="about"><Link to="/about"><InfoCircleOutlined /> About</Link></Menu.Item>
+                      {/* <Menu.Item key="about"><Link to="/about"><InfoCircleOutlined /> About</Link></Menu.Item> */}
                     </Menu>
                 }
               </nav>
             )}
           </Location>
-        </Headroom>
+        </div>
+        {/* </Headroom> */}
         <div className="background"></div>
+        <BackTop/>
         {/* <Router>
           <Home path="/">
             <Review path="/reviews/:reviewID"></Review>
@@ -124,6 +151,8 @@ const App = () => {
             <Review path="/reviews/:reviewID" />
             <SubmitReview path="/submit" />
             <ReviewNotFound path="/reviews/not-found" />
+            <ReviewSuccess path="/submit-success" />
+            <ReviewError path="/submit-error" />
           </Router>
         </div>
       </div>

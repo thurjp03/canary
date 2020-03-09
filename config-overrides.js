@@ -14,9 +14,8 @@ module.exports = override(
   // disableEsLint(),
   addLessLoader({
     javascriptEnabled: true,
-    // modifyVars: {
-    //   'primary-color': '#25b864',
-    //   'link-color': '#ff0',
-    // },
+    modifyVars: {
+      'primary-color': '#ffb300',
+    },
   }),
 );

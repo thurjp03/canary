@@ -1,12 +1,12 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import './SubmitReview.css';
 
 import { useCookies } from 'react-cookie';
-import { RouteComponentProps } from "@reach/router"
-import { Input, Form, Button, Select, AutoComplete, Radio, Tooltip, Rate, Steps, Checkbox } from 'antd/es';
-import { QuestionCircleOutlined, UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '@ant-design/icons';
-import { Collapse } from 'antd';
+import { RouteComponentProps, navigate } from "@reach/router"
+import { Input, Form, Button, Select, Radio, Tooltip, Rate, Steps, Checkbox, } from 'antd/es';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { YearValue } from '../reviews';
+import { database } from '../database'
 // import { InputChangeEvent } from 'antd/es/input';
 
 const { Option } = Select;
@@ -20,21 +20,21 @@ const { Option } = Select;
 //   wrapperCol: { span: 8, offset: 4 },
 // };
 
-const collegeSuggestions = [
-  "Georgia Institute of Technology",
-  "Carnegie Mellon",
-  "Georgia State University",
-].map((option, i) => ({ value: option }))
+// const collegeSuggestions = [
+//   "Georgia Institute of Technology",
+//   "Carnegie Mellon",
+//   "Georgia State University",
+// ].map((option, i) => ({ value: option }))
 
-const companySuggestions = [
-  "Amazon",
-  "General Motors",
-  "UPS",
-  "NCR",
-].map((option, i) => ({ value: option }))
+// const companySuggestions = [
+//   "Amazon",
+//   "General Motors",
+//   "UPS",
+//   "NCR",
+// ].map((option, i) => ({ value: option }))
 
 const years = ['2015', '2016', '2017', '2018', '2019', '2020']
-const semesters = ['Summer', 'Fall', 'Spring']
+const semesters = ['Spring', 'Summer', 'Fall']
 
 const terms = years.reduce((acc, year) => {
   let perm = semesters.reduce((a, semester) => [...a, semester + ' ' + year ], [] as string[])
@@ -42,52 +42,120 @@ const terms = years.reduce((acc, year) => {
 }, [] as string[]).map((option, i) => <Option value={option} key={i}>{option}</Option>)
 
 
-const majors = [
-  "Computer Science",
-  "Computational Media",
-  "Mechanical Engineering",
-].map((option, i) => <Option value={option} key={i}>{option}</Option>)
+// const majors = [
+//   "Computer Science",
+//   "Computational Media",
+//   "Mechanical Engineering",
+// ].map((option, i) => <Option value={option} key={i}>{option}</Option>)
 
 const DynamicRule = () => {
   const [form] = Form.useForm();
   const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'school', 'majors', 'year']);
   const [hasHousingStipend, setHasHousingStipend] = useState(false)
-  const onSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      console.log('Success:', values);
-    } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
-      if (errorInfo.values.remember_personal) {
-        setCookie('name', errorInfo.values.name || '');
-        setCookie('school', errorInfo.values.school || '');
-        setCookie('email', errorInfo.values.email || '');
-        setCookie('majors', errorInfo.values.majors || []);
-        setCookie('year', errorInfo.values.year || {});
-        setCookie('remember_personal', errorInfo.values.remember_personal);
-      } else {
-        removeCookie('name')
-        removeCookie('school')
-        removeCookie('email')
-        removeCookie('majors')
-        removeCookie('year')
-        removeCookie('remember_personal');
-      }
+
+ 
+  const onSuccess = values => {
+    if (values.remember_personal) {
+      setCookie('name', values.name || '');
+      setCookie('school', values.school || '');
+      setCookie('email', values.email || '');
+      setCookie('major', values.major || '');
+      setCookie('other_studies', values.other_studies || '');
+      setCookie('year', values.year || {});
+      setCookie('remember_personal', values.remember_personal);
+    } else {
+      removeCookie('name')
+      removeCookie('school')
+      removeCookie('email')
+      removeCookie('major')
+      removeCookie('other_studies')
+      removeCookie('year')
+      removeCookie('remember_personal');
     }
+    const review = {
+      id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      timestamp: { seconds: new Date().getTime() / 1000 },
+      company: {
+        name: values.company_name,
+        description: ''
+      },
+      position: values.position,
+      team: values.team,
+      internship_type: values.internship_type,
+      structured_program: values.structured_program,
+      location: values.location,
+      terms: values.terms,
+      pay: values.pay,
+      overall_rating: values.overall_rating,
+      culture_rating: values.culture_rating,
+      work_rating: values.work_rating,
+      year: values.year,
+      school: values.school,
+      major: values.major,
+      other_studies: values.other_studies || '',
+      housing_stipend: values.housing_stipend || '',
+      recommend: values.recommend,
+      not_recommend: values.not_recommend,
+      tools: {
+        often: values.tools_often || [],
+        occasionally: values.tools_occasionally || [],
+        rarely: values.tools_rarely || []
+      },
+      description: values.description,
+      offer: values.offer,
+      would_accept_offer: values.would_accept_offer,
+      impact: values.impact,
+      prerequisites: values.prerequisites,
+      expectations: values.expectations,
+      expectations_description: values.expectations_description,
+      work_time: values.work_time,
+      interview_advice: values.interview_advice || '',
+      optional_remarks: values.optional_remarks || '',
+    }
+    // console.log(review);
+
+    database.collection('review').doc(review.id).set(review).then(() => {
+      navigate('/submit-success')
+    }).catch(err => {
+      navigate('/submit-error')
+    })
   };
+
+  const onFail = (errorInfo) => {
+    if (errorInfo.values.remember_personal) {
+      setCookie('name', errorInfo.values.name || '');
+      setCookie('school', errorInfo.values.school || '');
+      setCookie('email', errorInfo.values.email || '');
+      setCookie('major', errorInfo.values.major || '');
+      setCookie('other_studies', errorInfo.values.other_studies || '');
+      setCookie('year', errorInfo.values.year || {});
+      setCookie('remember_personal', errorInfo.values.remember_personal);
+    } else {
+      removeCookie('name')
+      removeCookie('school')
+      removeCookie('email')
+      removeCookie('major')
+      removeCookie('other_studies')
+      removeCookie('year')
+      removeCookie('remember_personal');
+    }
+  }
 
   return (
     <Form
+      scrollToFirstError={true}
       initialValues={{
         name: cookies.name,
         school: cookies.school,
         email: cookies.email,
-        majors: cookies.majors,
+        major: cookies.major,
         year: cookies.year,
+        other_studies: cookies.other_studies,
         remember_personal: cookies.remember_personal === 'true',
         internship_type: 'internship',
-
       }}
+      onFinish={onSuccess}
+      onFinishFailed={onFail}
       form={form}
       layout="vertical"
       name="dynamic_rule">
@@ -97,7 +165,7 @@ const DynamicRule = () => {
           hasHousingStipend={hasHousingStipend}
           setHasHousingStipend={setHasHousingStipend} />}/>
         <Steps.Step status="wait" title="Internship experience" description={<InternshipExperience />} />
-        <Steps.Step status="wait" title="Submit" description={<Submit onSubmit={onSubmit}/>} />
+        <Steps.Step status="wait" title="Submit" description={<Submit onSubmit={onSuccess}/>} />
       </Steps>
     </Form>
   );
@@ -116,7 +184,7 @@ const AboutYou = () => (
     //   },
     // ]}
     >
-      <Input style={{ maxWidth: '250px' }} value={'foo'} placeholder="Please input your full name" />
+      <Input style={{ maxWidth: '250px' }} placeholder="Please input your full name" />
     </Form.Item>
     <Form.Item
       name="school"
@@ -127,11 +195,13 @@ const AboutYou = () => (
           message: 'Please input your school',
         }
       ]}>
-      <AutoComplete
+      <Input style={{ maxWidth: '320px' }} placeholder="Please input your school" />
+
+      {/* <AutoComplete
         options={collegeSuggestions}
         placeholder="Please input your school"
         style={{ maxWidth: '320px' }}
-        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/>
+        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/> */}
     </Form.Item>
     <Form.Item
       name="email"
@@ -148,21 +218,28 @@ const AboutYou = () => (
       <Input style={{ maxWidth: '250px' }} placeholder="Please input your school email" />
     </Form.Item>
     <Form.Item
-      name="majors"
-      label="Major(s)"
+      name="major"
+      label="Major"
       rules={[
         {
           required: true,
-          message: 'Please input your major(s)',
+          message: 'Please input your major',
         },
       ]}
     >
-      <Select
+      <Input style={{ maxWidth: '320px' }} placeholder="Please input your major" />
+      {/* <Select
         mode="tags"
         placeholder="Please input your major(s)"
         style={{ width: '100%', maxWidth: '340px' }} tokenSeparators={[',']}>
         {majors}
-      </Select>
+      </Select> */}
+    </Form.Item>
+    <Form.Item
+      name="other_studies"
+      label="Other studies (minors, certificates, etc.)"
+    >
+      <Input style={{ maxWidth: '350px' }} placeholder="Please input your major" />
     </Form.Item>
     <Form.Item
       name="year"
@@ -203,14 +280,15 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
           message: 'Please input the company name',
         }
       ]}>
-      <AutoComplete
+      <Input style={{ maxWidth: '300px' }} placeholder="Please input the company name" />
+      {/* <AutoComplete
         options={companySuggestions}
         placeholder="Please input the company name"
         style={{ maxWidth: '250px' }}
-        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/>
+        filterOption={(inputValue, option) => option ? option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1 : false}/> */}
     </Form.Item>
     <Form.Item
-      name="position_title"
+      name="position"
       label="Position title"
       rules={[
         {
@@ -221,7 +299,7 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
       <Input style={{ maxWidth: '250px' }} placeholder="Please input your position title" />
     </Form.Item>
     <Form.Item
-      name="department"
+      name="team"
       label="Department/Team"
       rules={[
         {
@@ -235,7 +313,7 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
       name="structured_program"
       label={
         <span>
-          Is there a structured internship/co-op program?&nbsp;
+          Is this a structured internship/co-op program?&nbsp;
           <Tooltip title="Employers usually make it clear on their hiring websites that the program you enrolled in was a structured program">
           <QuestionCircleOutlined />
           </Tooltip>
@@ -244,7 +322,7 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
       rules={[
         {
           required: true,
-          message: 'Please specify if there is a structured internship/co-op program',
+          message: 'Please specify if this is a structured internship/co-op program',
         }
       ]}>
       <Radio.Group>
@@ -316,16 +394,16 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
         },
       ]}>
       <Radio.Group>
-        <Radio style={verticalStyle} value={1}>
+        <Radio style={verticalStyle} value={0}>
           Yes
         </Radio>
-        <Radio style={verticalStyle} value={2}>
+        <Radio style={verticalStyle} value={1}>
           Offered, but declined
         </Radio>
-        <Radio style={verticalStyle} value={3}>
+        <Radio style={verticalStyle} value={2}>
           Not offered
         </Radio>
-        <Radio style={verticalStyle} value={4}>
+        <Radio style={verticalStyle} value={3}>
           Not applicable (e.g. it's too early)
         </Radio>
       </Radio.Group>
@@ -335,11 +413,21 @@ const InternshipDetails = ({ hasHousingStipend, setHasHousingStipend }) => (
       shouldUpdate={(prevValues, currentValues) => prevValues.offer !== currentValues.offer}
     >
       {({ getFieldValue }) => {
-        return (getFieldValue('offer') && getFieldValue('offer') > 2) ? (
-          <Form.Item name="would_offer" label="Would you accept a full-time offer here?" rules={[{ required: true }]}>
+        return (getFieldValue('offer') && getFieldValue('offer') > 1) ? (
+          <Form.Item name="would_accept_offer" label="Would you accept a full-time offer here?" rules={[{ required: true }]}>
             <Radio.Group>
-              <Radio.Button value="no">No</Radio.Button>
-              <Radio.Button value="yes">Yes</Radio.Button>
+              <Radio style={verticalStyle} value={0}>
+                Yes, definitely
+              </Radio>
+              <Radio style={verticalStyle} value={1}>
+                Maybe, I probably would
+              </Radio>
+                <Radio style={verticalStyle} value={2}>
+                Not offered
+              </Radio>
+              <Radio style={verticalStyle} value={3}>
+                Maybe, but probably not
+              </Radio>
             </Radio.Group>
           </Form.Item>
         ) : <div></div>;
@@ -360,16 +448,16 @@ const InternshipExperience = () => (
         },
       ]}>
       <Radio.Group>
-        <Radio style={verticalStyle} value={1}>
+        <Radio style={verticalStyle} value={0}>
           It was what I expected
         </Radio>
-        <Radio style={verticalStyle} value={2}>
+        <Radio style={verticalStyle} value={1}>
           It was better
         </Radio>
-        <Radio style={verticalStyle} value={3}>
+        <Radio style={verticalStyle} value={2}>
           It was worse
         </Radio>
-        <Radio style={verticalStyle} value={4}>
+        <Radio style={verticalStyle} value={3}>
           Not better or worse, just different
         </Radio>
       </Radio.Group>
@@ -379,8 +467,8 @@ const InternshipExperience = () => (
       shouldUpdate={(prevValues, currentValues) => prevValues.expectations !== currentValues.expectations}
     >
       {({ getFieldValue }) => {
-        return getFieldValue('expectations') && getFieldValue('expectations') > 1 ? (
-          <Form.Item name="expectations_description" label="How was it different?" rules={[{ required: true }]}>
+        return getFieldValue('expectations') && getFieldValue('expectations') > 0 ? (
+          <Form.Item name="expectations_description" label="How was it different?" rules={[{ required: true, message: 'Please describe how your experience was different' }]}>
             <Input.TextArea rows={2} />
           </Form.Item>
         ) : <div></div>;
@@ -396,19 +484,19 @@ const InternshipExperience = () => (
         },
       ]}>
       <Radio.Group>
-        <Radio style={verticalStyle} value={1}>
+        <Radio style={verticalStyle} value={0}>
           No impact (busy-work)
         </Radio>
-        <Radio style={verticalStyle} value={2}>
+        <Radio style={verticalStyle} value={1}>
           Not very impactful
         </Radio>
-        <Radio style={verticalStyle} value={3}>
+        <Radio style={verticalStyle} value={2}>
           Somewhat impactful
         </Radio>
-        <Radio style={verticalStyle} value={4}>
+        <Radio style={verticalStyle} value={3}>
           Impactful
         </Radio>
-        <Radio style={verticalStyle} value={5}>
+        <Radio style={verticalStyle} value={4}>
           Very impactful
         </Radio>
       </Radio.Group>
@@ -423,16 +511,16 @@ const InternshipExperience = () => (
         },
       ]}>
       <Radio.Group>
-        <Radio style={verticalStyle} value={1}>
+        <Radio style={verticalStyle} value={0}>
           None - they'll teach you what you need to know
         </Radio>
-        <Radio style={verticalStyle} value={2}>
+        <Radio style={verticalStyle} value={1}>
           Beginner - need basic knowledge/experience in this area
         </Radio>
-        <Radio style={verticalStyle} value={3}>
+        <Radio style={verticalStyle} value={2}>
           Intermediate - need to be pretty familiar with this area
         </Radio>
-        <Radio style={verticalStyle} value={4}>
+        <Radio style={verticalStyle} value={3}>
           Expert - need to have advanced knowledge / multiple prior experiences in this area
         </Radio>
       </Radio.Group>
@@ -447,19 +535,19 @@ const InternshipExperience = () => (
         },
       ]}>
       <Radio.Group>
-        <Radio style={verticalStyle} value={1}>
+        <Radio style={verticalStyle} value={0}>
           0-20% (I might as well have done nothing)
         </Radio>
-        <Radio style={verticalStyle} value={2}>
+        <Radio style={verticalStyle} value={1}>
           20-40% (I worked some, but there was a ton of down time)
           </Radio>
-        <Radio style={verticalStyle} value={3}>
+        <Radio style={verticalStyle} value={2}>
           40-60% (Some days I stayed busy, but there was a good bit of down time)
           </Radio>
-        <Radio style={verticalStyle} value={4}>
+        <Radio style={verticalStyle} value={3}>
           60-80% (I stayed pretty busy)
           </Radio>
-        <Radio style={verticalStyle} value={5}>
+        <Radio style={verticalStyle} value={4}>
           80-100% (I was more or less busy the whole time)
           </Radio>
       </Radio.Group>
@@ -485,11 +573,6 @@ const InternshipExperience = () => (
     <Form.Item
       name="tools_occasionally"
       label="Software/Tools you used occasionally"
-      rules={[
-        {
-          message: 'Please input the tools(s) you used occasionally',
-        },
-      ]}
     >
       <Select
         mode="tags"
@@ -502,11 +585,6 @@ const InternshipExperience = () => (
     <Form.Item
       name="tools_rarely"
       label="Software/Tools you used rarely"
-      rules={[
-        {
-          message: 'Please input the tools(s) you used rarely',
-        },
-      ]}
     >
       <Select
         mode="tags"
@@ -516,27 +594,53 @@ const InternshipExperience = () => (
         
       </Select>
     </Form.Item>
+    {/* <Form.Item
+      shouldUpdate={(prevValues, currentValues) => prevValues.work_rating !== currentValues.work_rating}>
+      
+      {({ getFieldValue }) => (
+        <div>
+          <Form.Item
+            name="work_rating"
+            noStyle
+            label="Rate the quality of work (1 = boring and useless, 10 = fascinating and engaging)" rules={[
+              {
+                required: true,
+                message: "Please rate your work experience",
+              }
+            ]}>
+            <Slider
+              min={0}
+              max={5}
+              step={0.5}
+              style={{ maxWidth: '300px' }}
+              marks={{ 0: '', 1: '', 2: '', 3: '', 4: '', 5: ''}} />
+          </Form.Item>
+          <Rate count={5} value={getFieldValue('work_rating')} allowHalf/>
+        </div>
+
+      )}
+    </Form.Item> */}
     <Form.Item
       name="work_rating"
-      label="Rate the quality of work (1 = boring and useless, 10 = fascinating and engaging)" rules={[
+      label="Rate the company work (1 = toxic and Discouraging, 5 = warm and Inspiring)" rules={[
         {
           required: true,
-          message: "Please rate your work experience",
+          message: "Please rate your company's work",
         }
       ]}>
 
-      <Rate count={10} />
+      <Rate count={5} allowHalf defaultValue={0}/>
     </Form.Item>
     <Form.Item
       name="culture_rating"
-      label="Rate the company culture (1 = toxic and Discouraging, 10 = warm and Inspiring)" rules={[
+      label="Rate the company culture (1 = toxic and Discouraging, 5 = warm and Inspiring)" rules={[
         {
           required: true,
           message: "Please rate your company's culture",
         }
       ]}>
 
-      <Rate count={10} />
+      <Rate count={5} allowHalf defaultValue={0}/>
     </Form.Item>
     <Form.Item
       name="overall_rating"
@@ -547,7 +651,7 @@ const InternshipExperience = () => (
         }
       ]}>
 
-      <Rate count={10} />
+      <Rate count={5} allowHalf defaultValue={0}/>
     </Form.Item>
     <Form.Item
       name="description"
@@ -583,7 +687,12 @@ const InternshipExperience = () => (
       <Input />
     </Form.Item>
     <Form.Item
-      name="additional_comments"
+      name="interview_advice"
+      label="Any advice on the application/interview process?">
+      <Input.TextArea rows={2}></Input.TextArea>
+    </Form.Item>
+    <Form.Item
+      name="optional_remarks"
       label="(Optional) Closing remarks/advice">
       <Input.TextArea rows={3}></Input.TextArea>
     </Form.Item>
@@ -597,7 +706,7 @@ const verticalStyle = {
 
 const Submit = ({ onSubmit }) => (
   <div className="submit">
-    <Form.Item
+    {/* <Form.Item
       name="platform_use"
       label="How likely would you be to use a platform that lets you read detailed student reviews of internship/co-op experiences?">
       <Radio.Group>
@@ -607,14 +716,14 @@ const Submit = ({ onSubmit }) => (
         <Radio style={verticalStyle} value="1">Not likely</Radio>
         <Radio style={verticalStyle} value="0">Not at all</Radio>
       </Radio.Group>
-    </Form.Item>
+    </Form.Item> */}
     <Form.Item
       name="feedback"
       label="Any thoughts or feedback about Canary? What would you like from this type of platform?">
       <Input.TextArea rows={3}></Input.TextArea>
     </Form.Item>
     <Form.Item>
-      <Button type="primary" onClick={onSubmit}>
+      <Button type="primary" htmlType="submit">
         Submit
       </Button>
     </Form.Item>
@@ -663,8 +772,9 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
       <Radio.Group value={value.grad_level} onChange={onGradLevelChange}>
         <Radio.Button value="undergraduate">Undergraduate</Radio.Button>
         <Radio.Button value="graduate">Graduate</Radio.Button>
+        <Radio.Button value="graduated">Graduated</Radio.Button>
       </Radio.Group>
-      <Radio.Group value={value.year} onChange={onCurrencyChange}>
+      <Radio.Group value={value.grad_level === 'graduated' ? undefined : value.year} onChange={onCurrencyChange} disabled={value.grad_level === 'graduated'}>
         <Radio.Button value="1st">1st</Radio.Button>
         <Radio.Button value="2nd">2nd</Radio.Button>
         <Radio.Button value="3rd">3rd</Radio.Button>

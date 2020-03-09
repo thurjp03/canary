@@ -1,7 +1,7 @@
 .company-card {
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 0 20px;
+  box-shadow: rgba(0, 0, 0, 0.09) 0 0 20px;
   background: #fff;
   margin-bottom: auto;
 }
@@ -12,7 +12,12 @@
 }
 
 .company-card__img {
-  width: 200px;
+  /* width: 200px; */
+  max-width: 200px;
+  max-height: 70px;
+  width: auto;
+  height: auto;
+  margin: 15px 0 auto 15px;
 }
 
 .company-card__reviews {

@@ -17,6 +17,17 @@
   margin-right: 10px;
   padding-top: 4px;
   color: #333;
+  position: relative;
+}
+
+.review-card__overall-rating__text {
+  position: absolute;
+  color: rgba(0,0,0,0.5);
+  bottom: -13px;
+  right: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  
 }
 
 .divisor {

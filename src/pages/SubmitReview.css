@@ -68,3 +68,21 @@
   font-size: 12px;
   color: #3339;
 } */
+
+.SubmitReview .ant-rate-star {
+  font-size: 40px;
+  /* font-size: 35px;
+  line-height: 0.8;
+  user-select: none; */
+}
+
+.SubmitReview .ant-slider-handle {
+  width: 23px;
+  height: 23px;
+  margin-top: -10px;
+  z-index: 5;
+}
+
+.SubmitReview .ant-rate {
+  color: #ffb300 !important;
+}
