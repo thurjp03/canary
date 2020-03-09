@@ -206,7 +206,6 @@ const AboutYou = () => (
     <Form.Item
       name="email"
       label="School email (will not be public)"
-      extra="Your email is only used to verify that you are a student"
       rules={[
         {
           required: true,
@@ -243,7 +242,8 @@ const AboutYou = () => (
     </Form.Item>
     <Form.Item
       name="year"
-      label="Year">
+      label="Year completed prior to internship"
+      extra="The latest year of college you completed before taking your internship">
       <YearInput/>
     </Form.Item>
     <Form.Item
