@@ -640,7 +640,7 @@ const InternshipExperience = () => (
     </Form.Item> */}
     <Form.Item
       name="work_rating"
-      label="Rate the company work (1 = toxic and Discouraging, 5 = warm and Inspiring)" rules={[
+      label="Rate the company work (1 = boring and useless, 5 = fascinating and engaging)" rules={[
         {
           required: true,
           message: "Please rate your company's work",
@@ -651,7 +651,7 @@ const InternshipExperience = () => (
     </Form.Item>
     <Form.Item
       name="culture_rating"
-      label="Rate the company culture (1 = toxic and Discouraging, 5 = warm and Inspiring)" rules={[
+      label="Rate the company culture (1 = toxic and discouraging, 5 = warm and inspiring)" rules={[
         {
           required: true,
           message: "Please rate your company's culture",
@@ -739,6 +739,13 @@ const Submit = ({ onSubmit }) => (
       name="feedback"
       label="Any thoughts or feedback about Canary? What would you like from this type of platform?">
       <Input.TextArea rows={3}></Input.TextArea>
+    </Form.Item>
+    <Form.Item
+      name="permission"
+      label="Conditions"
+      rules={[{required: true, message: 'Please check to accept'}]}
+      valuePropName="checked">
+      <Checkbox>I give permission to Canary to share my anonymized information on its website and with third parties. (We take privacy and anonymity seriously - we will NOT share your name or email)</Checkbox>
     </Form.Item>
     <Form.Item>
       <Button type="primary" htmlType="submit">
