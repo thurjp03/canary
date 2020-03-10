@@ -111,11 +111,23 @@ const DynamicRule = () => {
       work_time: values.work_time,
       interview_advice: values.interview_advice || '',
       optional_remarks: values.optional_remarks || '',
+      is_visible: false,
     }
     // console.log(review);
 
-    database.collection('review').doc(review.id).set(review).then(() => {
-      navigate('/submit-success')
+    const user = {
+      id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      name: values.name,
+      email: values.email,
+      review_id: review.id,
+    }
+
+    database.collection('users').doc(user.id).set(user).then(() => {
+      database.collection('review').doc(review.id).set(review).then(() => {
+        navigate('/submit-success')
+      }).catch(err => {
+        navigate('/submit-error')
+      })
     }).catch(err => {
       navigate('/submit-error')
     })
