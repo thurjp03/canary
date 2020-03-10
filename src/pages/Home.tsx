@@ -50,7 +50,7 @@ const Home = (props: HomeProps) => {
     // console.log(Array.from(urlParams.entries()));
     
     database.collection('review').where('is_visible', '==', true).get().then(data => {
-      let reviews = data.docs.map(d => d.data())
+      let reviews_data = data.docs.map(d => d.data())
       if (urlParams.has('text') && urlParams.get('text') !== '') {
         let keys:string[]|undefined = ["position", "company.name", "description"]
         if (urlParams.has('in')) {
@@ -66,11 +66,12 @@ const Home = (props: HomeProps) => {
           keys
         };
         // console.log(reviews);
-        var fuse = new Fuse(reviews, options);
+        var fuse = new Fuse(reviews_data, options);
         setReviews(fuse.search(urlParams.get('text') || '') as Review[])
       } else {
-        reviews.sort(r => -r.timestamp.seconds);
-        setReviews(reviews as Review[])
+        // 1583865226.853
+        reviews_data.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+        setReviews([...reviews_data] as Review[])
       }
     }).catch(err => {
       // console.log(err);
