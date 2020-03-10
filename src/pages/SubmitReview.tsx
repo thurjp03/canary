@@ -94,8 +94,8 @@ const DynamicRule = () => {
       major: values.major,
       other_studies: values.other_studies || '',
       housing_stipend: values.housing_stipend || '',
-      recommend: values.recommend,
-      not_recommend: values.not_recommend,
+      recommend: values.recommend || '',
+      not_recommend: values.not_recommend || '',
       tools: {
         often: values.tools_often || [],
         occasionally: values.tools_occasionally || [],
@@ -774,7 +774,7 @@ const YearInput: React.FC<YearInputProps> = ({ value = {}, onChange }) => {
         <Radio.Button value="graduate">Graduate</Radio.Button>
         <Radio.Button value="graduated">Graduated</Radio.Button>
       </Radio.Group>
-      <Radio.Group value={value.grad_level === 'graduated' ? undefined : value.year} onChange={onCurrencyChange} disabled={value.grad_level === 'graduated'}>
+      <Radio.Group value={value.grad_level === 'graduated' ? '' : value.year} onChange={onCurrencyChange} disabled={value.grad_level === 'graduated'}>
         <Radio.Button value="1st">1st</Radio.Button>
         <Radio.Button value="2nd">2nd</Radio.Button>
         <Radio.Button value="3rd">3rd</Radio.Button>
