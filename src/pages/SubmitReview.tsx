@@ -242,6 +242,12 @@ const AboutYou = () => (
     </Form.Item>
     <Form.Item
       name="year"
+      rules={[
+        {
+          required: true,
+          message: 'Please select your year'
+        }
+      ]}
       label="Year completed prior to internship"
       extra="The latest year of college you completed before taking your internship">
       <YearInput/>
