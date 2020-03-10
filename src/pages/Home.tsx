@@ -69,6 +69,7 @@ const Home = (props: HomeProps) => {
         var fuse = new Fuse(reviews, options);
         setReviews(fuse.search(urlParams.get('text') || '') as Review[])
       } else {
+        reviews.sort(r => -r.timestamp.seconds);
         setReviews(reviews as Review[])
       }
     }).catch(err => {
