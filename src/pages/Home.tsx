@@ -49,7 +49,7 @@ const Home = (props: HomeProps) => {
     urlParams = new URLSearchParams(search)
     // console.log(Array.from(urlParams.entries()));
     
-    database.collection('review').get().then(data => {
+    database.collection('review').where('is_visible', '==', true).get().then(data => {
       let reviews = data.docs.map(d => d.data())
       if (urlParams.has('text') && urlParams.get('text') !== '') {
         let keys:string[]|undefined = ["position", "company.name", "description"]

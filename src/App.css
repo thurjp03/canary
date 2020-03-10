@@ -74,3 +74,15 @@
 nav {
   display: flex;
 }
+
+footer {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+footer > * {
+  margin: 30px;
+}

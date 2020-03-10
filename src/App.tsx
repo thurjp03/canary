@@ -14,9 +14,14 @@ import Review from './pages/Review'
 import { useMediaQuery } from 'react-responsive'
 
 import logo from './images/canaryLogo-img.png';
-
+import uffizziLogo from './images/uffizzi-logo-blue-yellow.png'
 // import { database } from './database';
 // import { reviews } from './reviews'
+
+// database.collection('review').where('is_visible', '==', true).get().then(data => {
+//   console.log(data.docs.map(d => d.data()));
+  
+// })
 
 // reviews.forEach(review => {
 //   database.collection('review').doc(review.id).set(review).then(() => {
@@ -24,7 +29,6 @@ import logo from './images/canaryLogo-img.png';
     
 //   }).catch(err => {
 //     console.log('fail');
-    
 //   })
 // })
 
@@ -155,6 +159,16 @@ const App = () => {
             <ReviewError path="/submit-error" />
           </Router>
         </div>
+        <footer>
+          <div className="canary-details">
+            <div>Canary is a Georgia Tech Startup</div>
+            <a href="mailto:feedback@canarystudent.com">feedback@canarystudent.com</a>
+          </div>
+          <div className="host">
+            Hosted by<br/>
+            <img src={uffizziLogo} style={{width: '100px'}} alt="" />
+          </div>
+        </footer>
       </div>
     </CookiesProvider>
   );
