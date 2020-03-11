@@ -67,6 +67,7 @@ const Home = (props: HomeProps) => {
         };
         // console.log(reviews);
         var fuse = new Fuse(reviews_data, options);
+        setPage(1);
         setReviews(fuse.search(urlParams.get('text') || '') as Review[])
       } else {
         reviews_data.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
